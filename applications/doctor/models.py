@@ -241,14 +241,15 @@ class DetalleAtencion(models.Model):
 class ServiciosAdicionales(models.Model):
     # Nombre del servicio (ej. Radiografía, Laboratorio, Procedimiento menor, etc.)
     nombre_servicio = models.CharField(
-        max_length=255,
+        max_length=100,
+        unique=True,
         verbose_name="Nombre del Servicio",
         help_text="Ejemplo: Radiografía, Laboratorio clínico, Procedimiento menor."
     )
 
     # Costo unitario del servicio adicional
     costo_servicio = models.DecimalField(
-        max_digits=10,
+        max_digits=8,
         decimal_places=2,
         verbose_name="Costo del Servicio",
         help_text="Costo unitario del servicio en dólares. Ejemplo: 25.00"
@@ -258,7 +259,7 @@ class ServiciosAdicionales(models.Model):
     descripcion = models.TextField(
         null=True,
         blank=True,
-        verbose_name="Descripción del Servicio",
+        verbose_name="Descripción",
         help_text="Descripción opcional del servicio. Ejemplo: Examen de sangre de rutina."
     )
 
@@ -280,35 +281,62 @@ class ServiciosAdicionales(models.Model):
 # Pago de atencion y servicios varios
 class Pago(models.Model):
     # Relación con la atención médica (opcional para servicios independientes)
-    atencion = models.ForeignKey(Atencion, on_delete=models.PROTECT,
-                                 verbose_name="Atención", related_name="pagos",
-                                 null=True, blank=True)
+    atencion = models.ForeignKey(
+        Atencion,
+        on_delete=models.PROTECT,
+        verbose_name="Atención",
+        related_name="pagos",
+        null=True,
+        blank=True
+    )
 
     # Información del pago
-    metodo_pago = models.CharField(max_length=20, choices=MetodoPagoChoices.choices,
-                                   verbose_name="Método de Pago")
-    monto_total = models.DecimalField(max_digits=10, decimal_places=2,
-                                      verbose_name="Monto Total")
-    estado = models.CharField(max_length=20, choices=EstadoPagoChoices.choices,
-                              default=EstadoPagoChoices.PENDIENTE, verbose_name="Estado")
+    metodo_pago = models.CharField(
+        max_length=20,
+        choices=MetodoPagoChoices.choices,
+        verbose_name="Método de Pago"
+    )
+    monto_total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Monto Total"
+    )
+    estado = models.CharField(
+        max_length=20,
+        choices=EstadoPagoChoices.choices,
+        default=EstadoPagoChoices.PENDIENTE,
+        verbose_name="Estado"
+    )
 
     # Fechas
     fecha_pago = models.DateTimeField(verbose_name="Fecha de Pago", null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
 
     # Información del pagador (opcional)
-    nombre_pagador = models.CharField(max_length=100, verbose_name="Nombre del Pagador",
-                                      blank=True, null=True)
+    nombre_pagador = models.CharField(
+        max_length=100,
+        verbose_name="Nombre del Pagador",
+        blank=True,
+        null=True
+    )
 
     # Para pagos digitales
-    referencia_externa = models.CharField(max_length=100, verbose_name="Referencia Externa",
-                                          blank=True, null=True,
-                                          help_text="ID de transacción PayPal, etc.")
+    referencia_externa = models.CharField(
+        max_length=100,
+        verbose_name="Referencia Externa",
+        blank=True,
+        null=True,
+        help_text="ID de transacción PayPal, etc."
+    )
 
     # Evidencia del pago (solo para pagos no efectivo)
-    evidencia_pago = models.ImageField(upload_to='doctor/evidencia_pagos/', verbose_name="Evidencia de Pago",
-                                       blank=True, null=True,
-                                       help_text="Captura de pantalla o comprobante del pago")
+    evidencia_pago = models.ImageField(
+        upload_to='doctor/evidencia_pagos/',
+        verbose_name="Evidencia de Pago",
+        blank=True,
+        null=True,
+        help_text="Captura de pantalla o comprobante del pago"
+    )
 
     # Notas adicionales
     observaciones = models.TextField(verbose_name="Observaciones", blank=True, null=True)
@@ -423,10 +451,6 @@ class DetallePago(models.Model):
 
     def __str__(self):
         return f"{self.servicio_adicional} - Cantidad: {self.cantidad} - Subtotal: {self.subtotal}"
-
-    class Meta:
-        verbose_name = "Detalle de Pago"
-        verbose_name_plural = "Detalles de Pagos"
 
     def actualizar_total_pago(self):
         """Actualiza el monto total del pago basado en todos los detalles"""

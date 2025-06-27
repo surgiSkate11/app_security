@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 from applications.core.models import Paciente, Medicamento, Diagnostico
-from applications.doctor.forms.atencion import AtencionForm
+from applications.doctor.forms.atenciones import AtencionForm
 from applications.doctor.models import Atencion, DetalleAtencion
 from applications.security.components.mixin_crud import CreateViewMixin, DeleteViewMixin, ListViewMixin, \
     PermissionMixin, UpdateViewMixin

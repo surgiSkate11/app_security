@@ -1,7 +1,8 @@
 from django.urls import path
 
-from applications.doctor.views.atencion_medica import AtencionListView, AtencionCreateView, AtencionUpdateView, \
+from applications.doctor.views.atenciones import AtencionListView, AtencionCreateView, AtencionUpdateView, \
     AtencionDeleteView
+from applications.doctor.views.citas import CitaMedicaListView, CitaMedicaCreateView, CitaMedicaUpdateView
 
 app_name='doctor' # define un espacio de nombre para la aplicacion
 urlpatterns = [
@@ -12,4 +13,8 @@ urlpatterns = [
     path('atencion_delete/<int:pk>/', AtencionDeleteView.as_view(), name="atencion_delete"),
     
     
+    # Rutas para vistas relacionadas con Cita Medica
+    path('cita_list/', CitaMedicaListView.as_view(), name="cita_list"),
+    path('cita_create/', CitaMedicaCreateView.as_view(), name="cita_create"),
+    path('cita_update/<int:pk>/', CitaMedicaUpdateView.as_view(), name="cita_update"),
 ]
