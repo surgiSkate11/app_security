@@ -28,4 +28,4 @@ test-output/
 # Ignore build artifacts
 build/
 # ignore files desktop.ini
-desktop.ini
+*.ini
