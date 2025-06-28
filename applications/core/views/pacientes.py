@@ -6,6 +6,7 @@ from applications.core.models import Paciente
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from applications.core.forms.pacientes import PacienteForm
+from applications.doctor.utils.auditorias import registrar_auditoria
 
 """  Vista para buscar pacientes mediante AJAX. Por nombres, apellidos, cédula o teléfono. """
 
@@ -173,6 +174,11 @@ class PacienteCreateView(CreateView):
     template_name = 'core/pacientes/form.html'
     success_url = reverse_lazy('core:paciente_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        registrar_auditoria(self.request, 'Paciente', self.object.id, 'CREAR')
+        return response
+
 
 class PacienteUpdateView(UpdateView):
     model = Paciente
@@ -180,10 +186,22 @@ class PacienteUpdateView(UpdateView):
     template_name = 'core/pacientes/form.html'
     success_url = reverse_lazy('core:paciente_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        registrar_auditoria(self.request, 'Paciente', self.object.id, 'EDITAR')
+        return response
+
 
 class PacienteDeleteView(DeleteView):
     model = Paciente
     template_name = 'core/pacientes/confirm_delete.html'
     success_url = reverse_lazy('core:paciente_list')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        object_id = self.object.id
+        response = super().delete(request, *args, **kwargs)
+        registrar_auditoria(request, 'Paciente', object_id, 'ELIMINAR')
+        return response
 
 

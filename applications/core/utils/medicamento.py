@@ -16,3 +16,6 @@ class ViaAdministracion(models.TextChoices):
     OTIC = "otic", "Ótica"
     NASAL = "nasal", "Nasal"
     OTRA = "otra", "Otra"
+    
+    
+    

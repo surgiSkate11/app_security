@@ -635,6 +635,13 @@ class GastoMensual(models.Model):
     """
     Modelo que registra los gastos mensuales del consultorio del doctor.
     """
+    doctor = models.ForeignKey(
+        'core.Doctor',
+        on_delete=models.PROTECT,
+        verbose_name="Doctor",
+        related_name="gastos_mensuales",
+        help_text="Doctor responsable de este gasto."
+    )
     tipo_gasto = models.ForeignKey(
         TipoGasto,
         on_delete=models.PROTECT,

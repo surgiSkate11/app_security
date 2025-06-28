@@ -41,3 +41,14 @@ class PacienteForm(forms.ModelForm):
         if Paciente.objects.filter(cedula_ecuatoriana=cedula).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Esta cédula ya está registrada para otro paciente.")
         return cedula
+
+    def clean_fecha_nacimiento(self):
+        fecha = self.cleaned_data.get('fecha_nacimiento')
+        from datetime import date
+        if fecha:
+            if fecha > date.today():
+                raise forms.ValidationError("La fecha de nacimiento no puede ser en el futuro.")
+            edad = (date.today() - fecha).days // 365
+            if edad > 125:
+                raise forms.ValidationError("La edad no puede ser mayor a 125 años (el récord mundial es 122 años).")
+        return fecha

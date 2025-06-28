@@ -5,6 +5,8 @@ from django.db import models
 from applications.doctor.utils.cita_medica import EstadoCitaChoices
 from applications.doctor.utils.doctor import DiaSemanaChoices
 from applications.doctor.utils.pago import MetodoPagoChoices, EstadoPagoChoices
+from applications.security.models import User
+from simple_history.models import HistoricalRecords
 
 """
 Modelo Patient: Representa los pacientes registrados en el sistema médico.
@@ -70,12 +72,26 @@ class Atencion(models.Model):
         related_name="atenciones",
         help_text="Paciente que recibe esta atención médica."
     )
+    doctor = models.ForeignKey(
+        'core.Doctor',
+        on_delete=models.PROTECT,
+        verbose_name="Doctor",
+        related_name="atenciones_realizadas",
+        help_text="Doctor que realizó la atención."
+    )
 
     # Fecha y hora en que se realizó la atención
     fecha_atencion = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Fecha de Atención",
         help_text="Fecha y hora en que se registró la atención."
+    )
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name="Registrado por",
+        related_name="atenciones_registradas",
+        help_text="Usuario que registró la atención."
     )
     # Signos vitales
     presion_arterial = models.CharField(
@@ -343,6 +359,27 @@ class Pago(models.Model):
 
     activo = models.BooleanField(default=True, verbose_name="Activo")
 
+    # Campos de auditoría
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='pagos_creados',
+        verbose_name='Creado por',
+        null=True,
+        blank=True
+    )
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='pagos_actualizados',
+        verbose_name='Actualizado por',
+        null=True,
+        blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado el')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Actualizado el')
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"Pago {self.id} - {self.atencion} - {self.monto_total}"
 
@@ -435,6 +472,27 @@ class DetallePago(models.Model):
         verbose_name="Descripción del Seguro",
         help_text="Nombre del seguro utilizado. Ejemplo: Saludsa Nivel 2."
     )
+
+    # Campos de auditoría
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='detalles_pago_creados',
+        verbose_name='Creado por',
+        null=True,
+        blank=True
+    )
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='detalles_pago_actualizados',
+        verbose_name='Actualizado por',
+        null=True,
+        blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado el')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Actualizado el')
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         # Determinar precio base (seguro o normal)

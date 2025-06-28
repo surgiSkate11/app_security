@@ -3,6 +3,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from applications.core.models import GastoMensual
 from applications.core.forms.gasto_mensual import GastoMensualForm
 from django.db.models import Q
+from applications.doctor.utils.auditorias import registrar_auditoria
 
 class GastoMensualListView(ListView):
     model = GastoMensual
@@ -27,13 +28,29 @@ class GastoMensualCreateView(CreateView):
     template_name = 'core/gastomensual/form.html'
     success_url = reverse_lazy('core:gastomensual_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        registrar_auditoria(self.request, 'GastoMensual', self.object.id, 'CREAR')
+        return response
+
 class GastoMensualUpdateView(UpdateView):
     model = GastoMensual
     form_class = GastoMensualForm
     template_name = 'core/gastomensual/form.html'
     success_url = reverse_lazy('core:gastomensual_list')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        registrar_auditoria(self.request, 'GastoMensual', self.object.id, 'EDITAR')
+        return response
+
 class GastoMensualDeleteView(DeleteView):
     model = GastoMensual
     template_name = 'core/gastomensual/confirm_delete.html'
     success_url = reverse_lazy('core:gastomensual_list')
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        response = super().delete(request, *args, **kwargs)
+        registrar_auditoria(request, 'GastoMensual', obj.id, 'ELIMINAR')
+        return response

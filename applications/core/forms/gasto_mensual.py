@@ -6,12 +6,14 @@ class GastoMensualForm(forms.ModelForm):
         model = GastoMensual
         fields = '__all__'
         widgets = {
+            'doctor': forms.Select(attrs={'class': 'form-input', 'required': True}),
             'tipo_gasto': forms.Select(attrs={'class': 'form-input', 'required': True}),
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-input', 'required': True}),
             'valor': forms.NumberInput(attrs={'class': 'form-input', 'min': 0, 'step': '0.01', 'required': True}),
             'observacion': forms.Textarea(attrs={'class': 'form-input', 'rows': 2}),
         }
         error_messages = {
+            'doctor': {'required': 'El doctor es obligatorio.'},
             'tipo_gasto': {'required': 'El tipo de gasto es obligatorio.'},
             'fecha': {'required': 'La fecha es obligatoria.'},
             'valor': {'required': 'El valor es obligatorio.'},

@@ -6,8 +6,9 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
-from applications.core.models import Paciente, Medicamento, Diagnostico
+from applications.core.models import Paciente, Medicamento, Diagnostico, Doctor
 from applications.doctor.forms.atenciones import AtencionForm
 from applications.doctor.models import Atencion, DetalleAtencion
 from applications.security.components.mixin_crud import CreateViewMixin, DeleteViewMixin, ListViewMixin, \
@@ -16,6 +17,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 
 from proy_clinico.util import save_audit
+from applications.doctor.utils.auditorias import registrar_auditoria
 
 
 class AtencionListView(PermissionMixin, ListViewMixin, ListView):
@@ -86,10 +88,8 @@ class AtencionCreateView(PermissionMixin, CreateViewMixin, CreateView):
             with transaction.atomic():
                 # Crear la instancia del modelo Atencion
                 atencion = Atencion.objects.create(
-                    # Datos básicos
                     paciente_id=to_int(data.get('paciente')),
-
-                    # Signos vitales
+                    doctor_id=to_int(data.get('doctor')),
                     presion_arterial=signos_vitales.get('presionArterial'),
                     pulso=to_int(signos_vitales.get('pulso')),
                     temperatura=to_decimal(signos_vitales.get('temperatura')),
@@ -98,19 +98,14 @@ class AtencionCreateView(PermissionMixin, CreateViewMixin, CreateView):
                     peso=to_decimal(signos_vitales.get('peso')),
                     altura=to_decimal(signos_vitales.get('altura')),
                     es_control=bool(signos_vitales.get('consultaControl', False)),
-
-                    # Evaluación clínica
                     motivo_consulta=evaluacion_clinica.get('motivoConsulta', ''),
                     sintomas=evaluacion_clinica.get('sintomas', ''),
                     examen_fisico=evaluacion_clinica.get('examenFisico'),
-
-                    # Plan terapéutico
                     tratamiento=plan_terapeutico.get('tratamiento', ''),
                     examenes_enviados=plan_terapeutico.get('examenesEnviados'),
                     comentario_adicional=plan_terapeutico.get('comentarioAdicional'),
-
-                    # Fecha automática
-                    fecha_atencion=timezone.now()
+                    fecha_atencion=timezone.now(),
+                    created_by=request.user
                 )
 
                 # Procesar diagnósticos
@@ -130,8 +125,8 @@ class AtencionCreateView(PermissionMixin, CreateViewMixin, CreateView):
                         frecuencia_diaria=to_int(medicamento.get('frecuencia'))
                     )
 
-                # Guardar auditoría
-                save_audit(request, atencion, "ADICION")
+                # Guardar auditoría genérica
+                registrar_auditoria(request, 'Atencion', atencion.id, 'CREAR', estacion='PC-Recepcion')
 
                 # Mensaje de éxito
                 messages.success(request, f"Éxito al registrar la atención médica #{atencion.id}")
@@ -228,10 +223,10 @@ class AtencionUpdateView(PermissionMixin, UpdateViewMixin, UpdateView):
 
         try:
             with transaction.atomic():
+                atencion = self.get_object()
                 # Actualizar la instancia existente de Atencion
                 atencion.paciente_id = to_int(data.get('paciente'))
-
-                # Signos vitales
+                atencion.doctor_id = to_int(data.get('doctor'))
                 atencion.presion_arterial = signos_vitales.get('presionArterial')
                 atencion.pulso = to_int(signos_vitales.get('pulso'))
                 atencion.temperatura = to_decimal(signos_vitales.get('temperatura'))
@@ -240,13 +235,9 @@ class AtencionUpdateView(PermissionMixin, UpdateViewMixin, UpdateView):
                 atencion.peso = to_decimal(signos_vitales.get('peso'))
                 atencion.altura = to_decimal(signos_vitales.get('altura'))
                 atencion.es_control = bool(signos_vitales.get('consultaControl', False))
-
-                # Evaluación clínica
                 atencion.motivo_consulta = evaluacion_clinica.get('motivoConsulta', '')
                 atencion.sintomas = evaluacion_clinica.get('sintomas', '')
                 atencion.examen_fisico = evaluacion_clinica.get('examenFisico')
-
-                # Plan terapéutico
                 atencion.tratamiento = plan_terapeutico.get('tratamiento', '')
                 atencion.examenes_enviados = plan_terapeutico.get('examenesEnviados')
                 atencion.comentario_adicional = plan_terapeutico.get('comentarioAdicional')
@@ -276,8 +267,8 @@ class AtencionUpdateView(PermissionMixin, UpdateViewMixin, UpdateView):
                         frecuencia_diaria=to_int(medicamento.get('frecuencia'))
                     )
 
-                # Guardar auditoría para modificación
-                save_audit(request, atencion, "MODIFICACION")
+                # Guardar auditoría genérica para edición
+                registrar_auditoria(request, 'Atencion', atencion.id, 'EDITAR', estacion='PC-Recepcion')
 
                 # Mensaje de éxito
                 messages.success(request, f"Éxito al actualizar la atención médica #{atencion.id}")

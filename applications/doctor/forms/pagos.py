@@ -7,13 +7,12 @@ class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
         fields = [
-            'atencion', 'metodo_pago', 'monto_total', 'estado', 'fecha_pago',
+            'atencion', 'metodo_pago', 'estado', 'fecha_pago',
             'nombre_pagador', 'referencia_externa', 'evidencia_pago', 'observaciones', 'activo'
         ]
         widgets = {
             'atencion': forms.Select(attrs={'class': 'form-control'}),
             'metodo_pago': forms.Select(attrs={'class': 'form-control', 'required': True}),
-            'monto_total': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'step': '0.01', 'required': True}),
             'estado': forms.Select(attrs={'class': 'form-control', 'required': True}),
             'fecha_pago': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'nombre_pagador': forms.TextInput(attrs={'class': 'form-control'}),

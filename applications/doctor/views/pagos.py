@@ -1,6 +1,6 @@
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
-from applications.doctor.models import Pago, DetallePago
+from applications.doctor.models import Pago, DetallePago, ServiciosAdicionales
 from applications.doctor.forms.pagos import PagoForm, DetallePagoForm
 
 class PagoListView(ListView):
@@ -22,11 +22,44 @@ class PagoCreateView(CreateView):
     template_name = 'doctor/pagos/form.html'
     success_url = reverse_lazy('doctor:pago_list')
 
+    def form_valid(self, form):
+        detalles_data = self.request.POST.get('detalles_data')
+        # detalles_data debe ser una lista de dicts (puedes obtenerla de un campo oculto, JSON, etc.)
+        import json
+        detalles = json.loads(detalles_data) if detalles_data else []
+        from applications.doctor.utils.transacciones_pago import crear_pago_con_detalles
+        # Añadir usuario de auditoría
+        data = form.cleaned_data.copy()
+        data['created_by'] = self.request.user
+        data['updated_by'] = self.request.user
+        crear_pago_con_detalles(self.request, data, detalles)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['servicios'] = ServiciosAdicionales.objects.filter(activo=True)
+        return context
+
 class PagoUpdateView(UpdateView):
     model = Pago
     form_class = PagoForm
     template_name = 'doctor/pagos/form.html'
     success_url = reverse_lazy('doctor:pago_list')
+
+    def form_valid(self, form):
+        detalles_data = self.request.POST.get('detalles_data')
+        import json
+        detalles = json.loads(detalles_data) if detalles_data else []
+        from applications.doctor.utils.transacciones_pago import actualizar_pago_con_detalles
+        data = form.cleaned_data.copy()
+        data['updated_by'] = self.request.user
+        actualizar_pago_con_detalles(self.request, self.object.id, data, detalles)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['servicios'] = ServiciosAdicionales.objects.filter(activo=True)
+        return context
 
 class DetallePagoCreateView(CreateView):
     model = DetallePago
