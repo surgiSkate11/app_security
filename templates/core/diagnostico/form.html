@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Registrar/Editar Diagnóstico{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">{{ view.object.pk|yesno:'Editar,Registrar' }} Diagnóstico</h2>
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        {% include 'fragments/form_errors.html' %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block font-semibold">{{ field.label }}{% if field.field.required %}<span class="text-red-500">*</span>{% endif %}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="text-gray-500">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'core:diagnostico_list' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

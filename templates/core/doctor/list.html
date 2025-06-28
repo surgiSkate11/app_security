@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Doctores{% endblock %}
+{% block content %}
+<!-- Lista de doctores -->
+    {% include 'fragments/delete.html' with object=object object_name="Doctor" cancel_url=cancel_url %}
+<!-- ...existing code... -->
+{% endblock %}

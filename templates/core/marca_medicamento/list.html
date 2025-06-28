@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Marcas de Medicamento{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Marcas de Medicamento</h2>
+        <a href="{% url 'core:marcamedicamento_create' %}" class="btn btn-primary">Nueva Marca</a>
+    </div>
+    <form method="get" class="mb-4 flex gap-2">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar por nombre..." class="form-input w-64">
+        <button type="submit" class="btn btn-secondary">Buscar</button>
+    </form>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 rounded">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="py-2 px-4">Nombre</th>
+                    <th class="py-2 px-4">Descripción</th>
+                    <th class="py-2 px-4">Activo</th>
+                    <th class="py-2 px-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for marcamedicamento in marcamedicamentos %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-2 px-4">{{ marcamedicamento.nombre }}</td>
+                    <td class="py-2 px-4">{{ marcamedicamento.descripcion }}</td>
+                    <td class="py-2 px-4">{{ marcamedicamento.activo|yesno:'Sí,No' }}</td>
+                    <td class="py-2 px-4 flex gap-2">
+                        <a href="{% url 'core:marcamedicamento_update' marcamedicamento.pk %}" class="btn btn-xs btn-warning">Editar</a>
+                        <a href="{% url 'core:marcamedicamento_delete' marcamedicamento.pk %}" class="btn btn-xs btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center py-4">No hay marcas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+    <div class="mt-4 flex justify-center gap-2">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-xs">Anterior</a>
+        {% endif %}
+        <span class="px-2">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-xs">Siguiente</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% include 'fragments/delete.html' with object=object object_name="Marca de Medicamento" cancel_url=cancel_url %}
+</div>
+{% endblock %}

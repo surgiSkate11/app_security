@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="max-w-xl mx-auto mt-8 p-6 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">{{ view.object.pk|yesno:'Editar Tipo de Sangre,Nuevo Tipo de Sangre' }}</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% include 'fragments/form_errors.html' %}
+        {{ form.as_p }}
+        <div class="flex justify-end mt-4">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</button>
+            <a href="{% url 'core:tiposangre_list' %}" class="ml-2 px-4 py-2 rounded border border-gray-300 hover:bg-gray-100">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

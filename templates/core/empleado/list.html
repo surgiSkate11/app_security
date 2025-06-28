@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Empleados{% endblock %}
+{% block content %}
+<!-- Lista de empleados -->
+    {% include 'fragments/delete.html' with object=object object_name="Empleado" cancel_url=cancel_url %}
+<!-- Lista de empleados -->
+{% endblock %}

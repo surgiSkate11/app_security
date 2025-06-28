@@ -3,6 +3,9 @@ from django.db.models import Q
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from applications.core.models import Paciente
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from applications.core.forms.pacientes import PacienteForm
 
 """  Vista para buscar pacientes mediante AJAX. Por nombres, apellidos, cédula o teléfono. """
 
@@ -148,5 +151,39 @@ def paciente_find(request):
             'message': f'Error en la búsqueda: {str(e)}',
             'pacientes': []
         }, status=500)
+
+
+class PacienteListView(ListView):
+    model = Paciente
+    template_name = 'core/pacientes/list.html'
+    context_object_name = 'pacientes'
+    paginate_by = 20
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(nombres__icontains=q) | queryset.filter(apellidos__icontains=q)
+        return queryset
+
+
+class PacienteCreateView(CreateView):
+    model = Paciente
+    form_class = PacienteForm
+    template_name = 'core/pacientes/form.html'
+    success_url = reverse_lazy('core:paciente_list')
+
+
+class PacienteUpdateView(UpdateView):
+    model = Paciente
+    form_class = PacienteForm
+    template_name = 'core/pacientes/form.html'
+    success_url = reverse_lazy('core:paciente_list')
+
+
+class PacienteDeleteView(DeleteView):
+    model = Paciente
+    template_name = 'core/pacientes/confirm_delete.html'
+    success_url = reverse_lazy('core:paciente_list')
 
 

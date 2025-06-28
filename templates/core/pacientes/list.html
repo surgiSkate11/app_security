@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Pacientes{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Pacientes</h2>
+        <a href="{% url 'core:paciente_create' %}" class="btn btn-primary">Nuevo Paciente</a>
+    </div>
+    <form method="get" class="mb-4 flex gap-2">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar por nombre o apellido..." class="form-input w-64">
+        <button type="submit" class="btn btn-secondary">Buscar</button>
+    </form>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 rounded">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="py-2 px-4">Nombres</th>
+                    <th class="py-2 px-4">Apellidos</th>
+                    <th class="py-2 px-4">Cédula</th>
+                    <th class="py-2 px-4">Teléfono</th>
+                    <th class="py-2 px-4">Email</th>
+                    <th class="py-2 px-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in pacientes %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-2 px-4">{{ paciente.nombres }}</td>
+                    <td class="py-2 px-4">{{ paciente.apellidos }}</td>
+                    <td class="py-2 px-4">{{ paciente.cedula_ecuatoriana }}</td>
+                    <td class="py-2 px-4">{{ paciente.telefono }}</td>
+                    <td class="py-2 px-4">{{ paciente.email }}</td>
+                    <td class="py-2 px-4 flex gap-2">
+                        <a href="{% url 'core:paciente_update' paciente.pk %}" class="btn btn-xs btn-warning">Editar</a>
+                        <a href="{% url 'core:paciente_delete' paciente.pk %}" class="btn btn-xs btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center py-4">No hay pacientes registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if is_paginated %}
+    <div class="mt-4 flex justify-center gap-2">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-xs">Anterior</a>
+        {% endif %}
+        <span class="px-2">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-xs">Siguiente</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% include 'fragments/delete.html' with object=object object_name="Paciente" cancel_url=cancel_url %}
+</div>
+{% endblock %}
