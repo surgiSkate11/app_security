@@ -40,6 +40,14 @@ class HorarioAtencion(models.Model):
 
 class CitaMedica(models.Model):
     paciente = models.ForeignKey('core.Paciente', on_delete=models.CASCADE, verbose_name="Paciente", related_name="citas")
+    
+    doctor = models.ForeignKey(
+        'core.Doctor',
+        on_delete=models.PROTECT,
+        verbose_name="Doctor",
+        related_name="citas_medicas",
+        help_text="Doctor asignado a la cita."
+    )
     fecha = models.DateField(verbose_name="Fecha de la Cita")
     hora_cita = models.TimeField(verbose_name="Hora de la Cita")
 
@@ -52,7 +60,7 @@ class CitaMedica(models.Model):
     observaciones = models.TextField(verbose_name="Observaciones", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.paciente.nombre_completo} - {self.fecha} {self.hora_cita}"
+        return f"{self.paciente.nombre_completo} - {self.doctor} - {self.fecha} {self.hora_cita}"
 
     class Meta:
         ordering = ['fecha', 'hora_cita']
@@ -61,7 +69,17 @@ class CitaMedica(models.Model):
         ]
         verbose_name = "Cita Médica"
         verbose_name_plural = "Citas Médicas"
-        unique_together = ('fecha', 'hora_cita')  # Previene duplicidad
+        unique_together = ('doctor', 'fecha', 'hora_cita')  # Previene duplicidad por doctor
+
+    def save(self, *args, **kwargs):
+        # Refuerzo: Evita que un doctor tenga dos citas a la misma hora
+        if CitaMedica.objects.exclude(pk=self.pk).filter(doctor=self.doctor, fecha=self.fecha, hora_cita=self.hora_cita).exists():
+            raise ValueError("Ya existe una cita para este doctor en la misma fecha y hora.")
+        # Validación extra: no permitir citas en el pasado
+        from django.utils import timezone
+        if self.fecha < timezone.now().date() or (self.fecha == timezone.now().date() and self.hora_cita < timezone.now().time()):
+            raise ValueError("No se puede agendar una cita en el pasado.")
+        super().save(*args, **kwargs)
 
 class Atencion(models.Model):
     # Paciente que recibe esta atención médica

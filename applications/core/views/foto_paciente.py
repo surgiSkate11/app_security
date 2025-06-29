@@ -7,7 +7,7 @@ from applications.core.forms.foto_paciente import FotoPacienteForm
 
 class FotoPacienteListView(ListView):
     model = FotoPaciente
-    template_name = 'core/pacientes/galeriafotos.html'
+    template_name = 'core/pacientes/galeria_fotos.html'
     context_object_name = 'fotos'
     paginate_by = 12
 

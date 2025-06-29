@@ -16,7 +16,7 @@ def signout(request):
 def signin(request):
     
     data = {"title": "Login",
-            "title1": "Inicio de Sesión"}
+            "title1": "home de Sesión"}
     if request.method == "GET":
         # Obtener mensajes de éxito de la cola de mensajes
         success_messages = messages.get_messages(request)

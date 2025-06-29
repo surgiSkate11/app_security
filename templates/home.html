@@ -1,255 +1,489 @@
-{% extends 'base.html' %} 
-<title>{% block title %}{{title}}{% endblock %}</title>
-
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard Médico | AuraCare{% endblock %}
+{% block page_title %}AuraCare Médico{% endblock %}
 {% block content %}
-<div class="min-h-screen -mx-4 -my-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-    <!-- Header -->
-   
-
-    <!-- Contenido Principal -->
-    <main class="max-w-7xl mx-auto px-6 py-8">
-        <!-- Welcome Section -->
-        <div class="mb-8">
-            <div class="bg-gradient-to-r from-blue-500 to-indigo-400 rounded-2xl p-8 text-white relative overflow-hidden">
-                <div class="relative z-10">
-                    <h2 class="text-3xl font-bold mb-2">¡Bienvenido a SaludTotal!</h2>
-                    <p class="text-blue-100 text-lg">Gestiona tu citas y atenciones</p>
-                </div>
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-                <div class="absolute bottom-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mb-12"></div>
-            </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-600 text-sm font-medium">Total Usuarios</p>
-                        <p class="text-2xl font-bold text-gray-900">1,234</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-600 text-sm font-medium">Atenciones Hoy</p>
-                        <p class="text-2xl font-bold text-gray-900">89</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-600 text-sm font-medium">Consultas Pendientes</p>
-                        <p class="text-2xl font-bold text-gray-900">23</p>
-                    </div>
-                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-600 text-sm font-medium">Mantenimientos</p>
-                        <p class="text-2xl font-bold text-gray-900">5</p>
-                    </div>
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Menus del sistema -->
-      {% if user.is_authenticated %}
-
-
-            <!-- Iterar por cada menú -->
-            {% for menu_item in menu_list %}
-                <div class="mb-12">
-                    <!-- Título del Menú -->
-                    <div class="flex items-center mb-2">
-                        {% if menu_item.menu.icon %}
-                            <div class="flex items-center justify-center w-12 h-12 bg-gradient-to-r 
-                                {% cycle 'from-blue-500 to-blue-600' 'from-orange-500 to-red-500' 'from-green-500 to-emerald-500' 'from-purple-500 to-indigo-500' 'from-pink-500 to-rose-500' 'from-teal-500 to-cyan-500' %}
-                                rounded-xl mr-4">
-                                <i class="{{ menu_item.menu.icon }} text-white text-xl"></i>
-                            </div>
-                        {% endif %}
-                        <div>
-                            <h2 class="text-3xl font-bold text-gray-900">{{ menu_item.menu.name }}</h2>
-                            {% if menu_item.menu.description %}
-                                <p class="text-gray-600 mt-1">{{ menu_item.menu.description }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <hr class="border-0 h-1 bg-gradient-to-r from-transparent via-gray-400 to-transparent my-4 rounded">
-                    <!-- Cards de Módulos del Menú -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {% for module_permission in menu_item.group_module_permission_list %}
-                            <a href="{% if module_permission.module.url %}{{ module_permission.module.url }}{% else %}#{% endif %}" 
-                            class="module-card bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 group cursor-pointer block text-decoration-none">
-                                <!-- Icono del Módulo -->
-                                <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-r 
-                                    {% cycle 'from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300' 'from-orange-100 to-red-100 group-hover:from-orange-200 group-hover:to-red-200' 'from-green-100 to-emerald-100 group-hover:from-green-200 group-hover:to-emerald-200' 'from-purple-100 to-indigo-100 group-hover:from-purple-200 group-hover:to-indigo-200' 'from-pink-100 to-rose-100 group-hover:from-pink-200 group-hover:to-rose-200' 'from-teal-100 to-cyan-100 group-hover:from-teal-200 group-hover:to-cyan-200' %}
-                                    rounded-xl mb-4 transition-all duration-300">
-                                    
-                                    {% if module_permission.module.icon %}
-                                        <i class="{{ module_permission.module.icon }} 
-                                        {% cycle 'text-blue-600' 'text-orange-600' 'text-green-600' 'text-purple-600' 'text-pink-600' 'text-teal-600' %} 
-                                        text-lg"></i>
-                                    {% else %}
-                                        <!-- Icono por defecto para módulos -->
-                                        <i class="fas fa-cube 
-                                        {% cycle 'text-blue-600' 'text-orange-600' 'text-green-600' 'text-purple-600' 'text-pink-600' 'text-teal-600' %} 
-                                        text-lg"></i>
-                                    {% endif %}
-                                </div>
-                                
-                                <!-- Nombre del Módulo -->
-                                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ module_permission.module.name }}</h3>
-                                
-                                <!-- Descripción del Módulo -->
-                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">
-                                    {% if module_permission.module.description %}
-                                        {{ module_permission.module.description }}
-                                    {% else %}
-                                        Accede a las funcionalidades de {{ module_permission.module.name|lower }}.
-                                    {% endif %}
-                                </p>
-                                
-                                <!-- Botón de Acceso -->
-                                <div class="w-full font-medium py-2 px-4 rounded-lg transition-all duration-300 text-sm text-center
-                                    {% cycle 'bg-blue-50 hover:bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white' 'bg-orange-50 hover:bg-orange-100 text-orange-700 group-hover:bg-orange-600 group-hover:text-white' 'bg-green-50 hover:bg-green-100 text-green-700 group-hover:bg-green-600 group-hover:text-white' 'bg-purple-50 hover:bg-purple-100 text-purple-700 group-hover:bg-purple-600 group-hover:text-white' 'bg-pink-50 hover:bg-pink-100 text-pink-700 group-hover:bg-pink-600 group-hover:text-white' 'bg-teal-50 hover:bg-teal-100 text-teal-700 group-hover:bg-teal-600 group-hover:text-white' %}">
-                                    Acceder
-                                </div>
-                            </a>
-                        {% empty %}
-                            <!-- Mensaje cuando no hay módulos en este menú -->
-                            <div class="col-span-full text-center py-8">
-                                <div class="text-gray-400">No hay módulos disponibles en este menú</div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% empty %}
-                <!-- Mensaje cuando no hay menús disponibles -->
-                <div class="text-center py-12">
-                    <div class="text-gray-400 text-lg">No hay módulos disponibles para este grupo</div>
-                </div>
-            {% endfor %}
-
-      {% else %}
-                <!-- Mensaje para usuarios no autentificados -->
-                <div class="text-center py-12">
-                    <div class="text-gray-500 text-lg">Debes iniciar sesión para acceder a los módulos</div>
-                </div>
-      {% endif %}
-    </div>
-
-  
-    </main>
-</div>
-
 <style>
-/* Custom animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translate3d(0, 40px, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translate3d(30px, 0, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: .8;
-    }
-}
-
-.module-card {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.module-card:nth-child(1) { animation-delay: 0.1s; }
-.module-card:nth-child(2) { animation-delay: 0.2s; }
-.module-card:nth-child(3) { animation-delay: 0.3s; }
-.module-card:nth-child(4) { animation-delay: 0.4s; }
-.module-card:nth-child(5) { animation-delay: 0.5s; }
-.module-card:nth-child(6) { animation-delay: 0.6s; }
-
-/* Hover effects */
-.module-card:hover .gradient-icon {
-    animation: pulse 2s infinite;
-}
-
-/* Backdrop blur effect */
-.backdrop-blur-lg {
-    backdrop-filter: blur(16px);
-}
-</style>
-
-
-
-<!-- Ripple effect styles -->
-<style>
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    transform: scale(0);
-    animation: ripple-animation 0.6s linear;
-    pointer-events: none;
-}
-
-@keyframes ripple-animation {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-button {
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .widget-glass {
+    background: rgba(255,255,255,0.22);
+    border-radius: 1.1rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
     position: relative;
     overflow: hidden;
-}
+    min-height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.22s, transform 0.22s;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .widget-glass:hover {
+    box-shadow: 0 12px 40px 0 #6366f144, 0 2px 16px #6366f133;
+    transform: translateY(-4px) scale(1.025);
+  }
+  .widget-title {
+    font-size: 1.13rem;
+    font-weight: 600;
+    color: #6366f1;
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .widget-value {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .widget-badge {
+    background: linear-gradient(90deg, #22d3ee 60%, #6366f1 100%);
+    color: #fff;
+    font-size: 0.93rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 0.13rem 0.8rem;
+    margin-left: 0.7rem;
+    animation: badgePop 1.8s infinite;
+    box-shadow: 0 2px 8px #6366f144;
+  }
+  .widget-icon {
+    font-size: 2.2rem;
+    color: #6366f1;
+    margin-right: 0.7rem;
+    filter: drop-shadow(0 2px 8px #6366f1aa);
+    animation: pulse 2.5s infinite;
+  }
+  .widget-trend-up {
+    color: #22c55e;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    animation: badgePop 1.8s infinite;
+  }
+  .widget-trend-down {
+    color: #ef4444;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    animation: badgePop 1.8s infinite;
+  }
+  /* Pie chart glass card */
+  .chart-card {
+    background: rgba(255,255,255,0.22);
+    border-radius: 1.1rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 270px;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .chart-legend {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #374151;
+    background: rgba(99,102,241,0.07);
+    border-radius: 9999px;
+    padding: 0.2rem 0.8rem;
+    box-shadow: 0 2px 8px #6366f111;
+    animation: badgePop 1.8s infinite;
+  }
+  .legend-dot {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  /* Anatomical SVG */
+  .anatomy-card {
+    background: rgba(255,255,255,0.22);
+    border-radius: 1.1rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    min-height: 270px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .anatomy-svg {
+    width: 120px;
+    height: 220px;
+    margin-bottom: 1.2rem;
+    filter: drop-shadow(0 2px 8px #6366f1aa);
+  }
+  .anatomy-zone {
+    cursor: pointer;
+    transition: filter 0.18s, opacity 0.18s;
+    opacity: 0.85;
+  }
+  .anatomy-zone:hover {
+    filter: drop-shadow(0 0 16px #ef4444cc);
+    opacity: 1;
+    animation: pulse 1.2s infinite;
+  }
+  .anatomy-tooltip {
+    position: absolute;
+    background: #fff;
+    color: #111827;
+    font-size: 0.93rem;
+    font-weight: 600;
+    border-radius: 0.7rem;
+    box-shadow: 0 2px 12px #6366f122;
+    padding: 0.5rem 1rem;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.18s, transform 0.18s;
+    transform: translateY(-10px);
+  }
+  .anatomy-tooltip.show {
+    opacity: 1;
+    transform: translateY(-22px);
+  }
+  /* Quick actions */
+  .quick-actions {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .quick-btn {
+    background: rgba(255,255,255,0.22);
+    border-radius: 1.1rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: #6366f1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1.1rem 2.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    cursor: pointer;
+    transition: box-shadow 0.22s, transform 0.22s, background 0.18s;
+    position: relative;
+    outline: none;
+    border: none;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .quick-btn:focus {
+    box-shadow: 0 0 0 2px #6366f1;
+  }
+  .quick-btn:hover {
+    background: rgba(99,102,241,0.09);
+    color: #2563eb;
+    box-shadow: 0 12px 40px 0 #6366f144, 0 2px 16px #6366f133;
+    transform: translateY(-4px) scale(1.025);
+  }
+  .quick-btn .fa {
+    font-size: 1.5rem;
+    animation: pulse 2.5s infinite;
+  }
+  /* Info cards */
+  .info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .info-card {
+    background: rgba(255,255,255,0.22);
+    border-radius: 1.1rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    padding: 1.5rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+    transition: box-shadow 0.22s, transform 0.22s;
+  }
+  .info-card:hover {
+    box-shadow: 0 12px 40px 0 #6366f144, 0 2px 16px #6366f133;
+    transform: translateY(-4px) scale(1.025);
+  }
+  .info-icon {
+    font-size: 2.1rem;
+    color: #6366f1;
+    filter: drop-shadow(0 2px 8px #6366f1aa);
+    animation: pulse 2.5s infinite;
+  }
+  .info-content {
+    flex-grow: 1;
+  }
+  .info-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #6366f1;
+    margin-bottom: 0.3rem;
+  }
+  .info-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #111827;
+  }
+  .info-badge {
+    background: linear-gradient(90deg, #6366f1 60%, #2563eb 100%);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 0.13rem 0.7rem;
+    margin-left: 0.7rem;
+    animation: badgePop 1.8s infinite;
+    box-shadow: 0 2px 8px #6366f144;
+  }
+  /* Premium module cards */
+  .module-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .module-card {
+    background: rgba(255,255,255,0.22);
+    border-radius: 1.1rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 180px;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+    transition: box-shadow 0.22s, transform 0.22s;
+    position: relative;
+  }
+  .module-card:hover {
+    box-shadow: 0 12px 40px 0 #6366f144, 0 2px 16px #6366f133;
+    transform: translateY(-4px) scale(1.025);
+  }
+  .module-title {
+    font-size: 1.13rem;
+    font-weight: 700;
+    color: #6366f1;
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .module-desc {
+    font-size: 1.05rem;
+    color: #374151;
+    margin-bottom: 1.1rem;
+  }
+  .module-btn {
+    background: linear-gradient(90deg, #6366f1 60%, #2563eb 100%);
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    padding: 0.7rem 1.7rem;
+    border: none;
+    box-shadow: 0 2px 8px #6366f144;
+    transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+    cursor: pointer;
+    outline: none;
+    animation: fadeIn 1.1s cubic-bezier(.4,2,.3,1);
+  }
+  .module-btn:focus {
+    box-shadow: 0 0 0 2px #6366f1;
+  }
+  .module-btn:hover {
+    background: linear-gradient(90deg, #2563eb 60%, #6366f1 100%);
+    box-shadow: 0 8px 32px 0 #6366f1aa;
+    transform: scale(1.05);
+  }
+  @media (max-width: 900px) {
+    .dashboard-grid, .module-cards {
+      grid-template-columns: 1fr;
+    }
+    .quick-actions {
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+  }
 </style>
-{% endblock content %}
+<div class="dashboard-grid">
+  <div class="widget-glass">
+    <div class="widget-title"><i class="fas fa-wallet widget-icon"></i>Ingresos Mensuales</div>
+    <div class="widget-value">$12,500 <span class="widget-badge">+8%</span> <i class="fas fa-arrow-up widget-trend-up"></i></div>
+    <div style="font-size:0.95rem;color:#64748b;">Comparado con el mes anterior</div>
+  </div>
+  <div class="widget-glass">
+    <div class="widget-title"><i class="fas fa-user-injured widget-icon"></i>Pacientes Atendidos</div>
+    <div class="widget-value">320 <span class="widget-badge">+5%</span> <i class="fas fa-arrow-up widget-trend-up"></i></div>
+    <div style="font-size:0.95rem;color:#64748b;">Este mes</div>
+  </div>
+  <div class="widget-glass">
+    <div class="widget-title"><i class="fas fa-calendar-check widget-icon"></i>Citas Programadas</div>
+    <div class="widget-value">58 <span class="widget-badge">-2%</span> <i class="fas fa-arrow-down widget-trend-down"></i></div>
+    <div style="font-size:0.95rem;color:#64748b;">Próximos 7 días</div>
+  </div>
+  <div class="widget-glass">
+    <div class="widget-title"><i class="fas fa-pills widget-icon"></i>Recetas Emitidas</div>
+    <div class="widget-value">112 <span class="widget-badge">+3%</span> <i class="fas fa-arrow-up widget-trend-up"></i></div>
+    <div style="font-size:0.95rem;color:#64748b;">Este mes</div>
+  </div>
+</div>
+<div class="quick-actions">
+  <button class="quick-btn"><i class="fas fa-user-plus"></i>Nuevo Paciente</button>
+  <button class="quick-btn"><i class="fas fa-calendar-plus"></i>Agendar Cita</button>
+  <button class="quick-btn"><i class="fas fa-file-medical"></i>Generar Reporte</button>
+  <button class="quick-btn"><i class="fas fa-pills"></i>Recetar Medicamento</button>
+</div>
+<div class="info-cards">
+  <div class="info-card">
+    <i class="fas fa-heartbeat info-icon"></i>
+    <div class="info-content">
+      <div class="info-title">Emergencias Atendidas</div>
+      <div class="info-value">7 <span class="info-badge">Hoy</span></div>
+    </div>
+  </div>
+  <div class="info-card">
+    <i class="fas fa-vial info-icon"></i>
+    <div class="info-content">
+      <div class="info-title">Exámenes de Laboratorio</div>
+      <div class="info-value">24 <span class="info-badge">Semana</span></div>
+    </div>
+  </div>
+  <div class="info-card">
+    <i class="fas fa-user-md info-icon"></i>
+    <div class="info-content">
+      <div class="info-title">Doctores Activos</div>
+      <div class="info-value">5 <span class="info-badge">Turno</span></div>
+    </div>
+  </div>
+  <div class="info-card">
+    <i class="fas fa-chart-pie info-icon"></i>
+    <div class="info-content">
+      <div class="info-title">Ocupación de Camas</div>
+      <div class="info-value">68% <span class="info-badge">Capacidad</span></div>
+    </div>
+  </div>
+</div>
+<div class="dashboard-grid">
+  <div class="chart-card">
+    <canvas id="pieChart" width="180" height="180" aria-label="Distribución de pacientes" role="img"></canvas>
+    <div class="chart-legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#6366f1"></span> Adultos</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#22d3ee"></span> Niños</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span> Adultos Mayores</span>
+    </div>
+  </div>
+  <div class="anatomy-card" style="position:relative;">
+    <svg class="anatomy-svg" viewBox="0 0 120 220">
+      <ellipse cx="60" cy="60" rx="35" ry="50" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+      <ellipse class="anatomy-zone" id="heartZone" cx="60" cy="90" rx="13" ry="10" fill="#ef4444"/>
+      <ellipse class="anatomy-zone" id="lungZone" cx="60" cy="70" rx="22" ry="18" fill="#a5b4fc"/>
+      <ellipse class="anatomy-zone" id="liverZone" cx="60" cy="120" rx="18" ry="8" fill="#fbbf24"/>
+      <ellipse class="anatomy-zone" id="kidneyZone" cx="45" cy="140" rx="7" ry="12" fill="#22d3ee"/>
+      <ellipse class="anatomy-zone" id="kidneyZone2" cx="75" cy="140" rx="7" ry="12" fill="#22d3ee"/>
+    </svg>
+    <div class="anatomy-tooltip" id="anatomyTooltip"></div>
+    <div style="font-size:1.05rem;color:#64748b;">Vista anatómica interactiva</div>
+  </div>
+</div>
+<div class="module-cards">
+  <div class="module-card">
+    <div class="module-title"><i class="fas fa-user-injured"></i> Pacientes</div>
+    <div class="module-desc">Gestión avanzada de pacientes, historial, seguimiento y alertas personalizadas.</div>
+    <button class="module-btn">Ver Pacientes</button>
+  </div>
+  <div class="module-card">
+    <div class="module-title"><i class="fas fa-calendar-alt"></i> Citas</div>
+    <div class="module-desc">Agenda inteligente, recordatorios automáticos y gestión de disponibilidad médica.</div>
+    <button class="module-btn">Ver Citas</button>
+  </div>
+  <div class="module-card">
+    <div class="module-title"><i class="fas fa-stethoscope"></i> Consultas</div>
+    <div class="module-desc">Registro detallado de consultas, diagnósticos y prescripciones.</div>
+    <button class="module-btn">Ver Consultas</button>
+  </div>
+  <div class="module-card">
+    <div class="module-title"><i class="fas fa-wallet"></i> Finanzas</div>
+    <div class="module-desc">Panel financiero premium, reportes y análisis de ingresos y egresos.</div>
+    <button class="module-btn">Ver Finanzas</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Pie chart
+  const ctx = document.getElementById('pieChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Adultos', 'Niños', 'Adultos Mayores'],
+      datasets: [{
+        data: [62, 23, 15],
+        backgroundColor: ['#6366f1', '#22d3ee', '#fbbf24'],
+        borderWidth: 2,
+        borderColor: '#fff',
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false }
+      },
+      animation: {
+        animateScale: true
+      }
+    }
+  });
+  // Anatomy SVG tooltips
+  const anatomyTooltip = document.getElementById('anatomyTooltip');
+  const zones = [
+    { id: 'heartZone', label: 'Corazón', color: '#ef4444' },
+    { id: 'lungZone', label: 'Pulmones', color: '#a5b4fc' },
+    { id: 'liverZone', label: 'Hígado', color: '#fbbf24' },
+    { id: 'kidneyZone', label: 'Riñón Izquierdo', color: '#22d3ee' },
+    { id: 'kidneyZone2', label: 'Riñón Derecho', color: '#22d3ee' }
+  ];
+  zones.forEach(z => {
+    const el = document.getElementById(z.id);
+    if (el) {
+      el.addEventListener('mouseenter', e => {
+        anatomyTooltip.textContent = z.label;
+        anatomyTooltip.style.left = (e.clientX - e.target.getBoundingClientRect().left + 40) + 'px';
+        anatomyTooltip.style.top = (e.clientY - e.target.getBoundingClientRect().top - 10) + 'px';
+        anatomyTooltip.classList.add('show');
+      });
+      el.addEventListener('mouseleave', () => {
+        anatomyTooltip.classList.remove('show');
+      });
+    }
+  });
+</script>
+{% endblock %}
 

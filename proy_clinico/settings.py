@@ -172,3 +172,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
 }
+
+# === Configuración de PayPal ===
+PAYPAL_CLIENT_ID = 'AQANSEXBzMb9uGR1azwMOPa3wnKXdpiM-s_MbG7KLBalF7Whozu0x2LyHFc5VctvmIUpy1DFvEI0I-xS'  # Cambia esto por tu Client ID real
+PAYPAL_SECRET = 'ECjiJUuq7raOMOUFFgh3C2AA5OdYRdAataXd6hiCjiIAfEmOyXiC8zKXmCjyDJ00slDlTci7Thf7kpDr'        # Cambia esto por tu Secret real
+PAYPAL_API_BASE = 'https://api-m.sandbox.paypal.com'  # Usa 'https://api-m.paypal.com' en producción
+PAYPAL_CURRENCY = 'USD'  # O la moneda que prefieras

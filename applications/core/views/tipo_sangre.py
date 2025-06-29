@@ -6,7 +6,7 @@ from django.db.models import Q
 
 class TipoSangreListView(ListView):
     model = TipoSangre
-    template_name = 'core/tiposangre/list.html'
+    template_name = 'core/tipo_sangre/list.html'
     context_object_name = 'tipos_sangre'
     paginate_by = 10
 
@@ -23,16 +23,16 @@ class TipoSangreListView(ListView):
 class TipoSangreCreateView(CreateView):
     model = TipoSangre
     form_class = TipoSangreForm
-    template_name = 'core/tiposangre/form.html'
-    success_url = reverse_lazy('core:tiposangre_list')
+    template_name = 'core/tipo_sangre/form.html'
+    success_url = reverse_lazy('core:tipo_sangre_list')
 
 class TipoSangreUpdateView(UpdateView):
     model = TipoSangre
     form_class = TipoSangreForm
-    template_name = 'core/tiposangre/form.html'
-    success_url = reverse_lazy('core:tiposangre_list')
+    template_name = 'core/tipo_sangre/form.html'
+    success_url = reverse_lazy('core:tipo_sangre_list')
 
 class TipoSangreDeleteView(DeleteView):
     model = TipoSangre
-    template_name = 'core/tiposangre/confirm_delete.html'
-    success_url = reverse_lazy('core:tiposangre_list')
+    template_name = 'core/tipo_sangre/confirm_delete.html'
+    success_url = reverse_lazy('core:tipo_sangre_list')

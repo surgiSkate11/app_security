@@ -1,9 +1,9 @@
 {% extends 'home.html' %}
-<title>{% block title %}{{title}}{% endblock %}</title>
+{% block title %}{{ title }}{% endblock %}
 {% load static %}
 {% block css %}
     <script src="https://cdn.tailwindcss.com"></script>
-{%  endblock css %}
+{% endblock css %}
 {% block content %}
 <section class="bg-gray-50 min-h-screen">
    <!-- Header -->
@@ -373,1555 +373,84 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Motivo de Consulta *</label>
-                                    <textarea id="id_motivo_consulta" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Ingrese el motivo de la consulta...">{{ atencion.motivo_consulta|default:'' }}</textarea>
+                                    <div class="flex items-center gap-2">
+                                        <textarea id="id_motivo_consulta" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Ingrese el motivo de la consulta..."></textarea>
+                                        <button type="button" class="mic-btn" onclick="startDictation('id_motivo_consulta')" title="Dictar por voz" style="margin-left:5px;vertical-align:middle;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a1 1 0 1 1 2 0 7 7 0 0 1-6 6.92V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2.08A7 7 0 0 1 5 12a1 1 0 1 1 2 0 5 5 0 0 0 10 0z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Síntomas *</label>
-                                    <textarea id="id_sintomas" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Describa los síntomas presentados...">{{ atencion.sintomas|default:'' }}</textarea>
+                                    <div class="flex items-center gap-2">
+                                        <textarea id="id_sintomas" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Describa los síntomas presentados..."></textarea>
+                                        <button type="button" class="mic-btn" onclick="startDictation('id_sintomas')" title="Dictar por voz" style="margin-left:5px;vertical-align:middle;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a1 1 0 1 1 2 0 7 7 0 0 1-6 6.92V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2.08A7 7 0 0 1 5 12a1 1 0 1 1 2 0 5 5 0 0 0 10 0z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Examen Físico</label>
-                                <textarea id="id_examen_fisico" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Hallazgos del examen físico...">{{ atencion.examen_fisico|default:'' }}</textarea>
-                            </div>
-                           <!-- diagnosticos-->
-                           <div class="bg-pink-50 border border-gray-300 rounded-lg ">
-                             <label class="block text-sm font-semibold text-pink-800 mb-2">Diagnotico(s) *</label>
-                              <div class="bg-gray-50 p-4 rounded-xl">
-                                <div class="flex items-center space-x-3 mb-3">
-                                    <select
-                                        id="id_diagnostico"
-                                        multiple
-                                        class="flex-1 p-3 border border-gray-300 rounded-lg h-32 bg-white"
-                                        size="5">
-                                        {% for diagnostico in diagnosticos %}
-                                            <option
-                                                value="{{ diagnostico.id }}"
-                                                {% if atencion and diagnostico in atencion.diagnostico.all %}selected{% endif %}
-                                                title="{{ diagnostico.datos_adicionales|default:'' }}">
-                                                 {{ diagnostico.codigo }} - {{ diagnostico.descripcion }}
-                                            </option>
-                                        {% empty %}
-                                            <option value="" disabled>No hay diagnósticos disponibles</option>
-                                        {% endfor %}
-                                    </select>
+                                <div class="flex items-center gap-2">
+                                    <textarea id="id_examen_fisico" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Hallazgos del examen físico..."></textarea>
+                                    <button type="button" class="mic-btn" onclick="startDictation('id_examen_fisico')" title="Dictar por voz" style="margin-left:5px;vertical-align:middle;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a1 1 0 1 1 2 0 7 7 0 0 1-6 6.92V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2.08A7 7 0 0 1 5 12a1 1 0 1 1 2 0 5 5 0 0 0 10 0z"/>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div id="diagnosticos-lista" class="text-sm text-gray-600">
-                                    <!-- Aquí aparecerán los diagnósticos seleccionados -->
-                                </div>
-                            </div>
-                            </div>
-                           <!-- fin diagnosticos-->
-
-                     </div>
-                    </div>
-
-                    <!-- Plan Terapéutico -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                            <div class="w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                </svg>
-                            </div>
-                            Plan Terapéutico
-                        </h3>
-
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Plan de Tratamiento *</label>
-                                <textarea id="id_tratamiento" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Detalle el plan de tratamiento...">{{ atencion.tratamiento|default:'' }}</textarea>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Exámenes Solicitados</label>
-                                <textarea id="id_examenes_enviados" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Lista de exámenes solicitados...">{{ atencion.examenes_enviados|default:'' }}</textarea>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Comentario Adicional</label>
-                                <textarea id="id_comentario_adicional" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Comentarios adicionales...">{{ atencion.comentario_adicional|default:'' }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Prescripción de Medicamentos -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                            <div class="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-                                </svg>
-                            </div>
-                            Prescripción de Medicamentos
-                        </h3>
-
-                        <!-- Formulario de agregar medicamento -->
-                        <div class="bg-gray-50 p-6 rounded-xl mb-6">
-                            <h4 class="font-semibold text-gray-800 mb-4">Agregar Medicamento</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                               <!-- select dinamico -->
-                                  <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Medicamento *</label>
-                                    <select id="medicamento-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500" name="medicamento_id" required>
-                                        <option value="">Seleccione medicamento...</option>
-                                        {% for medicamento in medicamentos %}
-                                            <option value="{{ medicamento.id }}"
-                                                    title="{{ medicamento.nombre }} {{ medicamento.concentracion }} - {{ medicamento.tipo.nombre }} ({{ medicamento.marca_medicamento.nombre }}) - ${{ medicamento.precio }} - Stock: {{ medicamento.cantidad }}">
-                                                {{ medicamento.nombre }}
-                                            </option>
-                                        {% empty %}
-                                            <option value="" disabled>No hay medicamentos disponibles</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <!-- fin select -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Cantidad *</label>
-                                    <input type="number" id="cantidad-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500" placeholder="30">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Prescripción *</label>
-                                    <input type="text" id="prescripcion-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500" placeholder="1 cada 8 horas">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Duración (días) *</label>
-                                    <input type="number" id="duracion-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500" placeholder="7">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Frecuencia diaria *</label>
-                                    <input type="number" id="frecuencia-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500" placeholder="3">
+                                <div class="flex items-center gap-2">
+                                    <textarea id="id_comentario_adicional" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Comentarios adicionales..."></textarea>
+                                    <button type="button" class="mic-btn" onclick="startDictation('id_comentario_adicional')" title="Dictar por voz" style="margin-left:5px;vertical-align:middle;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a1 1 0 1 1 2 0 7 7 0 0 1-6 6.92V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2.08A7 7 0 0 1 5 12a1 1 0 1 1 2 0 5 5 0 0 0 10 0z"/>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="mt-4 flex space-x-3">
-                                <button type="button" onclick="agregarMedicamento()" class="bg-rose-600 hover:bg-rose-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 flex items-center space-x-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    <span>Add Prescripcion</span>
-                                </button>
-                                <button type="button" onclick="verDatos()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors duration-200">
-                                    Crear Medicamentos
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Tabla de medicamentos -->
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead>
-                                    <tr class="border-b-2 border-gray-200">
-                                        <th class="text-left py-4 px-4 font-semibold text-gray-700">Medicamento</th>
-                                        <th class="text-left py-4 px-4 font-semibold text-gray-700">Cantidad</th>
-                                        <th class="text-left py-4 px-4 font-semibold text-gray-700">Prescripción</th>
-                                        <th class="text-left py-4 px-4 font-semibold text-gray-700">Duración (días)</th>
-                                        <th class="text-left py-4 px-4 font-semibold text-gray-700">Frecuencia</th>
-                                        <th class="text-left py-4 px-4 font-semibold text-gray-700">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="medicamentos-table">
-                                    <!-- Los medicamentos se agregarán aquí dinámicamente -->
-                                </tbody>
-                            </table>
                         </div>
                     </div>
 
-                    <!-- Botón de Guardar -->
-                    <div class="bg-white rounded-2xl shadow-xl p-8 mt-8">
-                        <div class="flex justify-center space-x-4">
-                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 flex items-center space-x-3">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Guardar Atención Médica</span>
-                            </button>
-                            <button type="button" onclick="window.history.back()" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200">
-                                Cancelar
-                            </button>
+                    <!-- Diagnósticos -->
+                    <div class="bg-pink-50 border border-gray-300 rounded-lg ">
+                     <label class="block text-sm font-semibold text-pink-800 mb-2">Diagnotico(s) *</label>
+                      <div class="bg-gray-50 p-4 rounded-xl">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <select
+                                id="id_diagnostico"
+                                multiple
+                                class="flex-1 p-3 border border-gray-300 rounded-lg h-32 bg-white"
+                                size="5">
+                                {% for diagnostico in diagnosticos %}
+                                    <option
+                                        value="{{ diagnostico.id }}"
+                                        {% if atencion and diagnostico in atencion.diagnostico.all %}selected{% endif %}
+                                        title="{{ diagnostico.datos_adicionales|default:'' }}">
+                                     {{ diagnostico.codigo }} - {{ diagnostico.descripcion }}
+                                    </option>
+                                {% empty %}
+                                    <option value="" disabled>No hay diagnósticos disponibles</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id="diagnosticos-lista" class="text-sm text-gray-600">
+                            <!-- Aquí aparecerán los diagnósticos seleccionados -->
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-
-    </main>
-
-</section>
-
-<!-- CSS para estilos de error y variables médicas -->
- <style>
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        main { font-family: 'Inter', sans-serif; }
-        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .card-hover:hover { transform: translateY(-4px); }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .medical-gradient { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .glass-effect { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.9); }
-        .card-hover:hover {
-            transform: translateY(-4px);
-        }
-        /* Estilos adicionales para el modal de paciente */
-
-        /* Animación de entrada del modal */
-        #modal-agregar-paciente {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        #modal-agregar-paciente .inline-block {
-            animation: slideInDown 0.3s ease-out;
-        }
-
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translate3d(0, -100%, 0);
-            }
-            to {
-                opacity: 1;
-                transform: translateZ(0);
-            }
-        }
-
-        /* Estilos para el scroll del modal */
-        #modal-agregar-paciente {
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Altura máxima para dispositivos móviles */
-        @media (max-height: 600px) {
-            #modal-agregar-paciente .inline-block {
-                margin: 1rem 0;
-            }
-        }
-
-        /* Estilos para inputs focus mejorados */
-        .focus\:ring-2:focus {
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-        }
-
-        .focus\:ring-green-500:focus {
-            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
-        }
-
-        /* Transición suave para acordeón */
-        #content-datos-personales,
-        #content-historia-clinica {
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Estilos para validación de campos */
-        .campo-error {
-            border-color: #ef4444 !important;
-            background-color: #fef2f2 !important;
-        }
-
-        .campo-error:focus {
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5) !important;
-        }
-
-        /* Estilos para campos obligatorios */
-        input[required]:invalid {
-            border-color: #fbbf24;
-        }
-
-        input[required]:valid {
-            border-color: #10b981;
-        }
-
-        /* Hover effect mejorado para botones del acordeón */
-        .hover\:bg-blue-100:hover {
-            background-color: #dbeafe;
-        }
-
-        .hover\:bg-green-100:hover {
-            background-color: #dcfce7;
-        }
-
-        /* Estilos responsivos para el modal */
-        @media (max-width: 768px) {
-            #modal-agregar-paciente .inline-block {
-                margin: 0.5rem;
-                width: calc(100% - 1rem);
-            }
-
-            #modal-agregar-paciente .grid-cols-2 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Indicador visual para campos obligatorios */
-        label:has(+ input[required])::after,
-        label:has(+ select[required])::after {
-            content: ' *';
-            color: #ef4444;
-        }
-
-        /* Estilos para el upload de archivos */
-        input[type="file"] {
-            padding: 0.5rem !important;
-        }
-
-        input[type="file"]::-webkit-file-upload-button {
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            padding: 0.5rem 1rem;
-            margin-right: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        input[type="file"]::-webkit-file-upload-button:hover {
-            background: #e5e7eb;
-        }
-
-        /* Estilos para textarea resize */
-        textarea {
-            resize: vertical;
-            min-height: 2.5rem;
-        }
-
-        /* Animación de rotación para iconos del acordeón */
-        .transform.rotate-180 {
-            transform: rotate(180deg);
-        }
-
-        .transition-transform {
-            transition: transform 0.2s ease-in-out;
-        }
-
-        /* Backdrop blur para el modal */
-        #modal-agregar-paciente > .flex > .fixed {
-            backdrop-filter: blur(4px);
-        }
-
-        /* Scroll personalizado para el modal */
-        #modal-agregar-paciente::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #modal-agregar-paciente::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        #modal-agregar-paciente::-webkit-scrollbar-thumb {
-            background: rgba(156, 163, 175, 0.5);
-            border-radius: 4px;
-        }
-
-        #modal-agregar-paciente::-webkit-scrollbar-thumb:hover {
-            background: rgba(156, 163, 175, 0.7);
-        }
-        /* Estilos para el checkbox toggle */
-        input[type="checkbox"]:checked + div .bg-teal-200 {
-            background-color: #14b8a6; /* teal-500 */
-        }
-
-        input[type="checkbox"]:checked + div .transform {
-            transform: translateX(1rem); /* Mueve el círculo a la derecha */
-        }
-
-        input[type="checkbox"]:focus + div {
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
-            border-radius: 9999px;
-        }
-
-        /* Hover effect */
-        label:hover .bg-teal-200 {
-            background-color: #99f6e4; /* teal-300 */
-        }
-
-        input[type="checkbox"]:checked + div:hover .bg-teal-200 {
-            background-color: #0d9488; /* teal-600 */
-        }
-        /* estilos del select busqueda de paciente*/
-         .dropdown-open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-closed {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-        }
-
-        .option-hover:hover {
-            background-color: #dbeafe;
-        }
-
-        .option-selected {
-            background-color: #3b82f6;
-            color: white;
-        }
-
-        .loading-spinner {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .card-hover:hover {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            transform: translateY(-2px);
-        }
- </style>
-
- <script>
- // Recibir el contexto del paciente desde Django
- const pacienteDesdeServidor = {{ paciente_json|safe }};
- const medicamentosDesdeServidor = {{ medicamentos_json|safe }};
- const modoEdicion = {{ modo_edicion|yesno:"true,false" }};
-
-// ==============================
-// SISTEMA DE ATENCIÓN MÉDICA - CÓDIGO ORGANIZADO
-// ==============================
-
-// ==============================
-// 1. VARIABLES GLOBALES
-// ==============================
-let atencionMedica = null;
-let pacienteSeleccionado = null;
-let searchTimeout = null;
-let isSearching = false;
-
-// ==============================
-// 2. GESTIÓN DE PESTAÑAS/TABS
-// ==============================
-
-/**
- * Función para cambiar de pestaña o tabs
- * @param {string} tabName - Nombre de la pestaña a mostrar
- */
-function showTab(tabName) {
-    // Ocultar todas las pestañas
-    const allTabs = document.querySelectorAll('.tab-content');
-    allTabs.forEach(tab => {
-        tab.classList.remove('active');
-    });
-
-    // Mostrar la pestaña seleccionada
-    const selectedTab = document.getElementById('content-' + tabName);
-    selectedTab.classList.add('active');
-
-    // Actualizar estilos de los botones
-    const allButtons = document.querySelectorAll('.tab-button');
-    allButtons.forEach(button => {
-        button.classList.remove('border-blue-500', 'text-blue-600');
-        button.classList.add('border-transparent', 'text-gray-500');
-    });
-
-    // Activar el botón seleccionado
-    const selectedButton = document.getElementById('tab-' + tabName);
-    selectedButton.classList.remove('border-transparent', 'text-gray-500');
-    selectedButton.classList.add('border-blue-500', 'text-blue-600');
-}
-
-// ==============================
-// 3. CLASE PRINCIPAL - GESTOR DE ATENCIÓN MÉDICA
-// ==============================
-
-/**
- * Clase principal para procesar la atención médica con sus medicamentos
- */
-class GestorAtencionMedica {
-    constructor() {
-        console.log('🔧 Construyendo GestorAtencionMedica...');
-
-        // Inicializar arrays para medicamentos
-        this.medicamentos = [];
-
-        // Propiedades para capturar datos del formulario
-        this.paciente = '';
-        this.presionArterial = '';
-        this.pulso = '';
-        this.temperatura = '';
-        this.frecuenciaRespiratoria = '';
-        this.saturacionOxigeno = '';
-        this.peso = '';
-        this.altura = '';
-        this.consultaControl = false;
-        this.motivoConsulta = '';
-        this.sintomas = '';
-        this.examenFisico = '';
-        this.diagnostico = [];
-        this.tratamiento = '';
-        this.examenesEnviados = '';
-        this.comentarioAdicional = '';
-        setTimeout(() => {
-            this.inicializarDiagnosticos();
-        }, 100);
-        // 🆕 CARGAR MEDICAMENTOS SI ESTÁ EN MODO EDICIÓN
-        if (modoEdicion && medicamentosDesdeServidor.length > 0) {
-            console.log('💊 Modo edición detectado - Cargando medicamentos existentes...');
-            this.cargarMedicamentosExistentes(medicamentosDesdeServidor);
-        }
-
-    }
-
-   /**
-     * Carga los medicamentos existentes directamente en la lista y actualiza la tabla
-     * Se ejecuta solo en modo edición
-     */
-    cargarMedicamentosExistentes(medicamentos) {
-        console.log('📋 Cargando', medicamentos.length, 'medicamentos en la lista...');
-
-        // Recorrer cada medicamento del servidor
-        medicamentos.forEach((medicamentoData, index) => {
-            console.log(`💊 Procesando medicamento ${index + 1}:`, medicamentoData);
-
-            // Crear objeto medicamento con la misma estructura que usa agregarMedicamento()
-            const medicamentoParaLista = {
-                id: medicamentoData.id,
-                medicamento: medicamentoData.nombre,
-                cantidad: medicamentoData.cantidad,
-                prescripcion: medicamentoData.prescripcion,
-                duracion: medicamentoData.duracion,
-                frecuencia: medicamentoData.frecuencia
-            };
-
-            // Agregar directamente al array medicamentos
-            this.medicamentos.push(medicamentoParaLista);
-
-            console.log(`✅ Medicamento ${index + 1} agregado a la lista:`, medicamentoParaLista);
-        });
-
-        // Actualizar la tabla HTML una sola vez al final
-        // Usar setTimeout para asegurar que el DOM esté listo
-        setTimeout(() => {
-            this.actualizarTablaMedicamentos();
-            console.log('🎉 Tabla actualizada! Total medicamentos:', this.medicamentos.length);
-        }, 200);
-    }
-
-    /**
-     * Método seguro para obtener elemento por ID
-     * @param {string} id - ID del elemento
-     * @returns {Element|null} - Elemento encontrado o null
-     */
-    obtenerElementoSeguro(id) {
-        const elemento = document.getElementById(id);
-        if (!elemento) {
-            console.warn(`⚠️ Elemento no encontrado: ${id}`);
-        }
-        return elemento;
-    }
-
-    /**
-     * Método seguro para obtener valor de un elemento
-     * @param {string} id - ID del elemento
-     * @param {string} valorPorDefecto - Valor por defecto si no existe
-     * @returns {string} - Valor del elemento
-     */
-    obtenerValorSeguro(id, valorPorDefecto = '') {
-        const elemento = this.obtenerElementoSeguro(id);
-        return elemento ? elemento.value : valorPorDefecto;
-    }
-
-    /**
-     * Método seguro para verificar checkbox
-     * @param {string} id - ID del checkbox
-     * @returns {boolean} - Estado del checkbox
-     */
-    obtenerCheckboxSeguro(id) {
-        const elemento = this.obtenerElementoSeguro(id);
-        return elemento ? elemento.checked : false;
-    }
-
-    // ============================================
-    // 3.2 GESTIÓN DE MEDICAMENTOS
-    // ============================================
-
-    /**
-     * Método para agregar medicamento a la tabla
-     */
-    agregarMedicamento() {
-        console.log('💊 Agregando medicamento...');
-
-        // Obtener valores de los campos de forma segura
-        const select = document.getElementById('medicamento-select');
-        const medicamento = select.options[select.selectedIndex].text;
-        const cantidad = this.obtenerValorSeguro('cantidad-input');
-        const prescripcion = this.obtenerValorSeguro('prescripcion-input');
-        const duracion = this.obtenerValorSeguro('duracion-input');
-        const frecuencia = this.obtenerValorSeguro('frecuencia-input');
-
-        console.log('📋 Valores capturados:', {medicamento, cantidad, prescripcion, duracion, frecuencia});
-
-        // Validar que todos los campos estén llenos
-        if (!medicamento || !cantidad || !prescripcion || !duracion || !frecuencia) {
-            alert('Por favor, complete todos los campos obligatorios del medicamento.');
-            return;
-        }
-
-        // Validar que los números sean válidos
-        if (isNaN(cantidad) || isNaN(duracion) || isNaN(frecuencia)) {
-            alert('La cantidad, duración y frecuencia deben ser números válidos.');
-            return;
-        }
-
-        // Verificar si el medicamento ya existe en la lista
-        const medicamentoId = select.value;
-        const indiceExistente = this.medicamentos.findIndex(med => med.id === medicamentoId);
-
-        if (indiceExistente !== -1) {
-            console.log('🔄 Medicamento ya existe, reemplazando...', this.medicamentos[indiceExistente]);
-            // Eliminar el medicamento existente sin confirmación
-            this.medicamentos.splice(indiceExistente, 1);
-            console.log('🗑️ Medicamento anterior eliminado. Total restante:', this.medicamentos.length);
-        }
-
-        // Crear objeto medicamento
-        const nuevoMedicamento = {
-            id: medicamentoId,
-            medicamento: medicamento,
-            cantidad: parseInt(cantidad),
-            prescripcion: prescripcion,
-            duracion: parseInt(duracion),
-            frecuencia: parseInt(frecuencia)
-        };
-
-        // Agregar a la lista
-        this.medicamentos.push(nuevoMedicamento);
-
-        // Actualizar la tabla
-        this.actualizarTablaMedicamentos();
-
-        // Limpiar campos
-        this.limpiarCamposMedicamentos();
-
-        const accion = indiceExistente !== -1 ? 'actualizado' : 'agregado';
-        console.log(`✅ Medicamento ${accion}:`, nuevoMedicamento);
-        console.log('📊 Total medicamentos:', this.medicamentos.length);
-    }
-
-    /**
-     * Método para actualizar la tabla de medicamentos
-     */
-    actualizarTablaMedicamentos() {
-        console.log('🔄 Actualizando tabla de medicamentos...');
-
-        const tbody = this.obtenerElementoSeguro('medicamentos-table');
-
-        if (!tbody) {
-            console.error('❌ No se encontró la tabla con ID: medicamentos-table');
-            return;
-        }
-
-        // Limpiar tabla
-        tbody.innerHTML = '';
-
-        // Agregar cada medicamento
-        this.medicamentos.forEach((med, index) => {
-            const fila = document.createElement('tr');
-            fila.className = 'border-b border-gray-100 hover:bg-gray-50';
-
-            fila.innerHTML = `
-                <td class="py-4 px-4 text-gray-800">${med.medicamento}</td>
-                <td class="py-4 px-4 text-gray-600">${med.cantidad}</td>
-                <td class="py-4 px-4 text-gray-600">${med.prescripcion}</td>
-                <td class="py-4 px-4 text-gray-600">${med.duracion}</td>
-                <td class="py-4 px-4 text-gray-600">${med.frecuencia}</td>
-                <td class="py-4 px-4">
-                    <button onclick="eliminarMedicamentoSeguro(${index})"
-                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors duration-200">
-                        Eliminar
-                    </button>
-                </td>
-            `;
-
-            tbody.appendChild(fila);
-        });
-
-        console.log('✅ Tabla actualizada. Total medicamentos:', this.medicamentos.length);
-    }
-
-    /**
-     * Método para limpiar campos de medicamentos
-     */
-    limpiarCamposMedicamentos() {
-        const campos = ['medicamento-select', 'cantidad-input', 'prescripcion-input', 'duracion-input', 'frecuencia-input'];
-
-        campos.forEach(id => {
-            const elemento = this.obtenerElementoSeguro(id);
-            if (elemento) {
-                elemento.value = '';
-            }
-        });
-    }
-
-    /**
-     * Método para eliminar medicamento
-     * @param {number} index - Índice del medicamento a eliminar
-     */
-    eliminarMedicamento(index) {
-        if (confirm('¿Está seguro de que desea eliminar este medicamento?')) {
-            this.medicamentos.splice(index, 1);
-            this.actualizarTablaMedicamentos();
-            console.log('🗑️ Medicamento eliminado. Total restante:', this.medicamentos.length);
-        }
-    }
-
-    // ============================================
-    // 3.3 GESTIÓN DE DIAGNÓSTICOS
-    // ============================================
-
-    /**
- * Método para manejar selección de diagnósticos desde select múltiple
- */
-agregarDiagnostico() {
-    console.log('🔄 Función agregarDiagnostico() llamada');
-
-    const diagnosticoSelect = this.obtenerElementoSeguro('id_diagnostico');
-    const diagnosticoLista = this.obtenerElementoSeguro('diagnosticos-lista');
-
-    if (!diagnosticoSelect || !diagnosticoLista) {
-        console.error('❌ No se encontraron los elementos de diagnóstico');
-        alert('Error: Elementos de diagnóstico no encontrados en la página');
-        return;
-    }
-
-    // Limpiar la lista visual actual
-    diagnosticoLista.innerHTML = '';
-
-    // Obtener todas las opciones seleccionadas
-    const opcionesSeleccionadas = Array.from(diagnosticoSelect.selectedOptions);
-
-    if (opcionesSeleccionadas.length === 0) {
-        console.log('ℹ️ No hay diagnósticos seleccionados');
-        return;
-    }
-
-    // Crear spans visuales para cada diagnóstico seleccionado
-    opcionesSeleccionadas.forEach(option => {
-        const span = document.createElement('span');
-        span.className = 'bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-2 mb-2 inline-block';
-        span.textContent = option.text;
-
-        // Agregar botón de eliminar
-        const btnEliminar = document.createElement('button');
-        btnEliminar.innerHTML = '×';
-        btnEliminar.className = 'ml-1 text-red-500 hover:text-red-700';
-        btnEliminar.onclick = () => {
-            // Deseleccionar la opción del select
-            option.selected = false;
-            // Remover el span visual
-            span.remove();
-            console.log('🗑️ Diagnóstico eliminado:', option.text);
-        };
-        span.appendChild(btnEliminar);
-
-        diagnosticoLista.appendChild(span);
-    });
-
-    console.log('✅ Diagnósticos actualizados:', opcionesSeleccionadas.length);
-}
-
-/**
- * Método para inicializar listeners de diagnósticos
- */
-inicializarDiagnosticos() {
-    const diagnosticoSelect = this.obtenerElementoSeguro('id_diagnostico');
-
-    if (diagnosticoSelect) {
-        // Agregar listener para cambios en el select múltiple
-        diagnosticoSelect.addEventListener('change', () => {
-            this.agregarDiagnostico();
-        });
-
-        console.log('✅ Listeners de diagnósticos inicializados');
-    }
-}
-    // ============================================
-    // 3.4 GRABACIÓN Y ENVÍO DE DATOS
-    // ============================================
-
-    /**
-     * Método para capturar todos los datos del formulario
-     */
-    grabarAtencion() {
-        console.log('💾 Iniciando proceso de grabación...');
-
-        try {
-            // Capturar datos de identificación
-            this.paciente = this.obtenerValorSeguro('id_paciente', '1');
-
-            // Capturar signos vitales y mediciones
-            this.presionArterial = this.obtenerValorSeguro('id_presion_arterial');
-            this.pulso = this.obtenerValorSeguro('id_pulso');
-            this.temperatura = this.obtenerValorSeguro('id_temperatura');
-            this.frecuenciaRespiratoria = this.obtenerValorSeguro('id_frecuencia_respiratoria');
-            this.saturacionOxigeno = this.obtenerValorSeguro('id_saturacion_oxigeno');
-            this.peso = this.obtenerValorSeguro('id_peso');
-            this.altura = this.obtenerValorSeguro('id_altura');
-            this.consultaControl = this.obtenerCheckboxSeguro('id_consulta_control');
-
-            // Capturar evaluación clínica
-            this.motivoConsulta = this.obtenerValorSeguro('id_motivo_consulta');
-            this.sintomas = this.obtenerValorSeguro('id_sintomas');
-            this.examenFisico = this.obtenerValorSeguro('id_examen_fisico');
-
-            // Capturar diagnósticos seleccionados
-            this.diagnostico = [];
-            const diagnosticoElement = this.obtenerElementoSeguro("id_diagnostico");
-
-            if (diagnosticoElement?.selectedOptions?.length > 0) {
-                // Convertir a array y mapear los valores
-                this.diagnostico = Array.from(diagnosticoElement.selectedOptions)
-                    .map(option => {
-                        const id = parseInt(option.value);
-                        return isNaN(id) ? null : id;
-                    })
-                    .filter(id => id !== null); // Filtrar valores inválidos
-            }
-
-            // Capturar plan terapéutico
-            this.tratamiento = this.obtenerValorSeguro('id_tratamiento');
-            this.examenesEnviados = this.obtenerValorSeguro('id_examenes_enviados');
-            this.comentarioAdicional = this.obtenerValorSeguro('id_comentario_adicional');
-
-            // Validar campos obligatorios
-            const errores = this.validarCamposObligatorios();
-            if (errores.length > 0) {
-                alert('Por favor, complete los siguientes campos obligatorios:\n' + errores.join('\n'));
-                return;
-            }
-
-            // Preparar objeto con todos los datos
-            const datosAtencion = this.obtenerDatosCompletos();
-            console.log('📦 Datos preparados para envío:', datosAtencion);
-
-            // Enviar datos al backend
-            this.enviarDatosAlBackend(datosAtencion);
-
-            console.log('✅ Proceso de grabación iniciado');
-            window.location.href = "{% url 'doctor:atencion_list' %}"
-
-        } catch (error) {
-            console.error('❌ Error en grabarAtencion:', error);
-            alert('Error al procesar los datos: ' + error.message);
-        }
-    }
-
-    /**
-     * Método para enviar datos al backend usando fetch
-     * @param {Object} datos - Datos de la atención médica
-     */
-    async enviarDatosAlBackend(datos) {
-        try {
-            // Mostrar indicador de carga
-            this.mostrarIndicadorCarga(true);
-
-            // URL del endpoint - CAMBIAR POR TU URL REAL
-            //const url = "{% url 'doctor:atencion_create' %}"
-            let url = window.location.pathname.trim()
-
-            console.log('🚀 EJECUTANDO FETCH - Enviando datos al backend...');
-            console.log('📍 URL:', url);
-            console.log('📦 Datos a enviar:', datos);
-
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify(datos)
-            });
-
-            // Ocultar indicador de carga
-            this.mostrarIndicadorCarga(false);
-
-            if (response.ok) {
-                const resultado = await response.json();
-                console.log('✅ FETCH EXITOSO - Respuesta del servidor:', resultado);
-
-                this.mostrarMensajeExito(resultado);
-                this.limpiarFormulario();
-
-            } else {
-                const error = await response.text();
-                console.error('❌ FETCH ERROR - Error del servidor:', response.status, error);
-                this.mostrarMensajeError(`Error del servidor (${response.status}): ${error}`);
-            }
-
-        } catch (error) {
-            this.mostrarIndicadorCarga(false);
-            console.error('❌ FETCH FALLÓ - Error de conexión:', error);
-
-            if (error instanceof TypeError && error.message.includes('fetch')) {
-                console.log('🔌 Sin conexión - Ofreciendo modo offline...');
-                this.manejarErrorConexion(datos);
-            } else {
-                this.mostrarMensajeError('Error inesperado: ' + error.message);
-            }
-        }
-    }
-
-    // ============================================
-    // 3.5 MÉTODOS DE INTERFAZ DE USUARIO
-    // ============================================
-
-    /**
-     * Método para mostrar indicador de carga
-     * @param {boolean} mostrar - Si mostrar o no el indicador
-     */
-    mostrarIndicadorCarga(mostrar) {
-        const botonGuardar = document.querySelector('button[type="submit"]');
-
-        if (!botonGuardar) {
-            console.warn('⚠️ Botón de guardar no encontrado');
-            return;
-        }
-
-        if (mostrar) {
-            botonGuardar.disabled = true;
-            botonGuardar.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Guardando...
-            `;
-        } else {
-            botonGuardar.disabled = false;
-            botonGuardar.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Guardar Atención Médica</span>
-            `;
-        }
-    }
-
-    /**
-     * Método para mostrar mensaje de éxito
-     * @param {Object} resultado - Resultado del servidor
-     */
-    mostrarMensajeExito(resultado) {
-        const mensaje = resultado.message || 'Atención médica guardada exitosamente';
-        const id = resultado.id || 'N/A';
-
-        alert(`✅ ${mensaje}\n\n` +
-              `ID de Atención: ${id}\n` +
-              `Medicamentos: ${this.medicamentos.length}\n` +
-              `Diagnósticos: ${this.diagnostico.length}\n` +
-              `Fecha: ${new Date().toLocaleString()}`);
-    }
-
-    /**
-     * Método para mostrar mensaje de error
-     * @param {string} mensaje - Mensaje de error
-     */
-    mostrarMensajeError(mensaje) {
-        alert(`❌ Error al guardar:\n\n${mensaje}\n\nRevise la conexión e intente nuevamente.`);
-    }
-
-    /**
-     * Método para manejar errores de conexión
-     * @param {Object} datos - Datos a guardar offline
-     */
-    manejarErrorConexion(datos) {
-        const guardarOffline = confirm(
-            '❌ No se pudo conectar con el servidor.\n\n' +
-            '¿Desea guardar los datos localmente?\n\n' +
-            '(Los datos se enviarán cuando se restaure la conexión)'
-        );
-
-        if (guardarOffline) {
-            this.guardarDatosOffline(datos);
-            alert('💾 Datos guardados localmente.\n\nSe enviarán automáticamente cuando se restaure la conexión.');
-        }
-    }
-
-    /**
-     * Método para guardar datos offline
-     * @param {Object} datos - Datos a guardar
-     */
-    guardarDatosOffline(datos) {
-        try {
-            const datosOffline = JSON.parse(localStorage.getItem('atencionesOffline') || '[]');
-            datosOffline.push({
-                ...datos,
-                fechaGuardadoOffline: new Date().toISOString(),
-                id_temporal: 'offline_' + Date.now()
-            });
-            localStorage.setItem('atencionesOffline', JSON.stringify(datosOffline));
-            console.log('💾 Datos guardados offline:', datos);
-        } catch (error) {
-            console.error('❌ Error al guardar offline:', error);
-        }
-    }
-
-    // ============================================
-    // 3.6 UTILIDADES Y VALIDACIONES
-    // ============================================
-
-    /**
-     * Método para limpiar el formulario
-     */
-    limpiarFormulario() {
-        const campos = [
-            'id_presion_arterial', 'id_pulso', 'id_temperatura', 'id_frecuencia_respiratoria',
-            'id_saturacion_oxigeno', 'id_peso', 'id_altura', 'id_motivo_consulta',
-            'id_sintomas', 'id_examen_fisico', 'id_tratamiento', 'id_examenes_enviados',
-            'id_comentario_adicional'
-        ];
-
-        campos.forEach(id => {
-            const elemento = this.obtenerElementoSeguro(id);
-            if (elemento) {
-                elemento.value = '';
-            }
-        });
-
-        // Limpiar checkbox
-        const checkbox = this.obtenerElementoSeguro('id_consulta_control');
-        if (checkbox) {
-            checkbox.checked = false;
-        }
-
-        // Limpiar diagnósticos
-        const diagnosticoLista = this.obtenerElementoSeguro('diagnosticos-lista');
-        const diagnosticoSelect = this.obtenerElementoSeguro('id_diagnostico');
-
-        if (diagnosticoLista) diagnosticoLista.innerHTML = '';
-        if (diagnosticoSelect) diagnosticoSelect.innerHTML = '';
-
-        // Limpiar medicamentos
-        this.medicamentos = [];
-        this.actualizarTablaMedicamentos();
-
-        console.log('🧹 Formulario limpiado');
-    }
-
-    /**
-     * Método para validar campos obligatorios
-     * @returns {Array} - Array de errores encontrados
-     */
-    validarCamposObligatorios() {
-        const errores = [];
-
-        if (!this.motivoConsulta.trim()) errores.push('- Motivo de Consulta');
-        if (!this.sintomas.trim()) errores.push('- Síntomas');
-        if (this.diagnostico.length === 0) errores.push('- Diagnósticos');
-        if (!this.tratamiento.trim()) errores.push('- Plan de Tratamiento');
-
-        return errores;
-    }
-
-   /**
- * Método para obtener todos los datos estructurados con conversiones numéricas
- * @returns {Object} - Objeto con todos los datos de la atención
- */
- obtenerDatosCompletos() {
-    // Función auxiliar para convertir a número o null
-    const convertirANumero = (valor) => {
-        if (!valor || valor === '') return null;
-        const numero = parseFloat(valor);
-        return isNaN(numero) ? null : numero;
-    };
-
-    // Función auxiliar para convertir a entero o null
-    const convertirAEntero = (valor) => {
-        if (!valor || valor === '') return null;
-        const numero = parseInt(valor);
-        return isNaN(numero) ? null : numero;
-    };
-
-    // Procesar medicamentos con conversiones numéricas
-    const medicamentosProcesados = this.medicamentos.map(med => ({
-        id: convertirAEntero(med.id),
-        medicamento: med.medicamento,
-        cantidad: convertirAEntero(med.cantidad),
-        prescripcion: med.prescripcion,
-        duracion: convertirAEntero(med.duracion),
-        frecuencia: convertirAEntero(med.frecuencia)
-    }));
-
-    return {
-        paciente: convertirAEntero(this.paciente),
-        signosVitales: {
-            presionArterial: this.presionArterial, // Se mantiene como string (ej: "120/80")
-            pulso: convertirAEntero(this.pulso),
-            temperatura: convertirANumero(this.temperatura),
-            frecuenciaRespiratoria: convertirAEntero(this.frecuenciaRespiratoria),
-            saturacionOxigeno: convertirANumero(this.saturacionOxigeno),
-            peso: convertirANumero(this.peso),
-            altura: convertirANumero(this.altura),
-            consultaControl: Boolean(this.consultaControl)
-        },
-        evaluacionClinica: {
-            motivoConsulta: this.motivoConsulta,
-            sintomas: this.sintomas,
-            examenFisico: this.examenFisico,
-            diagnostico: this.diagnostico
-        },
-        planTerapeutico: {
-            tratamiento: this.tratamiento,
-            examenesEnviados: this.examenesEnviados,
-            comentarioAdicional: this.comentarioAdicional
-        },
-        medicamentos: medicamentosProcesados,
-        fechaAtencion: new Date().toISOString(),
-        totalMedicamentos: this.medicamentos.length,
-        totalDiagnosticos: this.diagnostico.length
-    };
- }
-
-    /**
-     * Método para mostrar datos
-     */
-    verDatos() {
-        const url = "/admin/core/medicamento/add/?_to_field=id&_popup=1";
-        window.open(url, "_blank", "width=800,height=600,resizable=yes,scrollbars=yes");
-    }
-}
-
-// ==============================
-// 4. SELECTOR DE PACIENTES
-// ==============================
-
-/**
- * Elementos DOM para el selector de pacientes
- */
-let searchInput, dropdown, pacientesList, loadingIndicator, searchIcon, clearButton, noResults, minCharsMessage, datosContainer, noMensaje;
-
-/**
- * Función para manejar el input de búsqueda
- * @param {Event} e - Evento del input
- */
-function handleSearchInput(e) {
-    const query = e.target.value.trim();
-
-    // Mostrar/ocultar botón de limpiar
-    if (query.length > 0) {
-        clearButton.classList.remove('hidden');
-        searchIcon.classList.add('hidden');
-    } else {
-        clearButton.classList.add('hidden');
-        searchIcon.classList.remove('hidden');
-        ocultarDropdown();
-        return;
-    }
-
-    // Limpiar timeout anterior
-    if (searchTimeout) {
-        clearTimeout(searchTimeout);
-    }
-
-    // Configurar nuevo timeout
-    searchTimeout = setTimeout(() => {
-        if (query.length >= 3) {
-            buscarPacientes(query);
-        } else if (query.length > 0) {
-            mostrarMensajeMinCaracteres();
-        } else {
-            ocultarDropdown();
-        }
-    }, 300); // Debounce de 300ms
-}
-
-/**
- * Función para manejar el foco del input
- */
-function handleInputFocus() {
-    const query = searchInput.value.trim();
-    if (query.length >= 3) {
-        mostrarDropdown();
-    } else if (query.length > 0) {
-        mostrarMensajeMinCaracteres();
-    }
-}
-
-/**
- * Función para manejar cuando se pierde el foco
- */
-function handleInputBlur() {
-    // Pequeño delay para permitir clicks en el dropdown
-    setTimeout(() => {
-        if (!dropdown.matches(':hover')) {
-            ocultarDropdown();
-        }
-    }, 200);
-}
-
-/**
- * Función para manejar clicks en el documento
- * @param {Event} e - Evento del click
- */
-function handleDocumentClick(e) {
-    if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
-        ocultarDropdown();
-    }
-}
-
-/**
- * Función para buscar pacientes en el backend
- * @param {string} query - Término de búsqueda
- */
-async function buscarPacientes(query) {
-    if (isSearching) return;
-
-    isSearching = true;
-    mostrarIndicadorCarga();
-
-    try {
-        // Construir URL con parámetros
-        const url = new URL(window.location.origin + '/core/paciente_find/');
-        url.searchParams.append('q', query);
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        mostrarResultados(data.pacientes || []);
-
-    } catch (error) {
-        console.error('Error al buscar pacientes:', error);
-        mostrarError('Error al buscar pacientes. Por favor, intente nuevamente.');
-    } finally {
-        isSearching = false;
-        ocultarIndicadorCarga();
-    }
-}
-
-/**
- * Función para mostrar los resultados de búsqueda
- * @param {Array} pacientes - Lista de pacientes encontrados
- */
-function mostrarResultados(pacientes) {
-    pacientesList.innerHTML = '';
-
-    if (pacientes.length === 0) {
-        noResults.classList.remove('hidden');
-        minCharsMessage.classList.add('hidden');
-    } else {
-        noResults.classList.add('hidden');
-        minCharsMessage.classList.add('hidden');
-
-        pacientes.forEach(paciente => {
-            const option = crearOpcionPaciente(paciente);
-            pacientesList.appendChild(option);
-        });
-    }
-
-    mostrarDropdown();
-}
-
-/**
- * Función para crear una opción de paciente
- * @param {Object} paciente - Datos del paciente
- * @returns {HTMLElement} - Elemento DOM de la opción
- */
-function crearOpcionPaciente(paciente) {
-    const option = document.createElement('div');
-    option.className = 'px-4 py-3 cursor-pointer option-hover transition-colors duration-150 border-b border-gray-50 last:border-b-0';
-    option.setAttribute('data-paciente-id', paciente.id);
-
-    option.innerHTML = `
-        <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                ${(paciente.nombres?.charAt(0) || '') + (paciente.apellidos?.charAt(0) || '')}
-            </div>
-            <div class="flex-1 min-w-0">
-                <div class="text-sm font-medium text-gray-900 truncate">
-                    ${paciente.nombres || ''} ${paciente.apellidos || ''}
-                </div>
-                <div class="text-xs text-gray-500 truncate">
-                    CI: ${paciente.cedula_ecuatoriana || paciente.dni || 'No disponible'} |
-                    Tel: ${paciente.telefono || 'No disponible'}
-                </div>
-            </div>
-        </div>
-    `;
-
-    option.addEventListener('click', () => seleccionarPaciente(paciente));
-
-    return option;
-}
-
-/**
- * Función para seleccionar un paciente
- * @param {Object} paciente - Datos del paciente seleccionado
- */
-function seleccionarPaciente(paciente) {
-    pacienteSeleccionado = paciente;
-
-    // Actualizar el input
-    searchInput.value = `${paciente.id} - ${paciente.nombres} ${paciente.apellidos} - CI: ${paciente.cedula_ecuatoriana || paciente.dni}`;
-    document.getElementById('id_paciente').value=paciente.id
-    // Ocultar dropdown
-    ocultarDropdown();
-
-    // Cargar datos del paciente
-    cargarDatosPaciente(paciente);
-    cargarConsultas(paciente.atenciones);
-}
-
-/**
- * Función para cargar los datos del paciente en la interfaz
- * @param {Object} paciente - Datos del paciente
- */
-function cargarDatosPaciente(paciente) {
-    // Calcular edad
-    const edad = calcularEdad(paciente.fecha_nacimiento);
-
-    // Actualizar información personal
-    document.getElementById('paciente-nombre').textContent =
-        `${paciente.nombres || ''} ${paciente.apellidos || ''}`;
-    document.getElementById('paciente-foto').src = paciente.foto_url;
-    document.getElementById('paciente-telefono').textContent = paciente.telefono || 'No disponible';
-    document.getElementById('paciente-direccion').textContent = paciente.direccion || 'No disponible';
-    document.getElementById('paciente-email').textContent = paciente.email || 'No disponible';
-    document.getElementById('paciente-edad').textContent = edad;
-    document.getElementById('paciente-cedula').textContent =
-        `CI: ${paciente.cedula_ecuatoriana || paciente.dni || 'No disponible'}`;
-
-    // Datos fijos de la nueva atención
-    document.getElementById('paciente-foto2').src = paciente.foto_url;
-    document.getElementById('paciente-edad2').textContent = edad;
-    document.getElementById('paciente-nombre2').textContent =
-        `${paciente.nombres || ''} ${paciente.apellidos || ''}`;
-    document.getElementById('id_paciente').textContent = paciente.id;
-
-    // Actualizar historia clínica
-    document.getElementById('antecedentes-personales').value = paciente.antecedentes_personales || '';
-    document.getElementById('antecedentes-quirurgicos').value = paciente.antecedentes_quirurgicos || '';
-    document.getElementById('antecedentes-familiares').value = paciente.antecedentes_familiares || '';
-    document.getElementById('alergias').value = paciente.alergias || '';
-    document.getElementById('medicamentos-actuales').value = paciente.medicamentos_actuales || '';
-    document.getElementById('habitos-toxicos').value = paciente.habitos_toxicos || '';
-    document.getElementById('vacunas').value = paciente.vacunas || '';
-    document.getElementById('antecedentes-gineco').value = paciente.antecedentes_gineco_obstetricos || '';
-
-    // Mostrar contenedor de datos y ocultar mensaje
-    datosContainer.classList.remove('hidden');
-    noMensaje.classList.add('hidden');
-}
-
-/**
- * Función para calcular la edad
- * @param {string} fechaNacimiento - Fecha de nacimiento
- * @returns {string} - Edad calculada
- */
-function calcularEdad(fechaNacimiento) {
-    if (!fechaNacimiento) return 'No disponible';
-
-    const hoy = new Date();
-    const nacimiento = new Date(fechaNacimiento);
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    const meses = hoy.getMonth() - nacimiento.getMonth();
-
-    if (meses < 0 || (meses === 0 && hoy.getDate() < nacimiento.getDate())) {
-        edad--;
-    }
-
-    return `${edad} años`;
-}
-
-/**
- * Función para limpiar la selección de paciente
- */
-function limpiarSeleccion() {
-    searchInput.value = '';
-    pacienteSeleccionado = null;
-    clearButton.classList.add('hidden');
-    searchIcon.classList.remove('hidden');
-    ocultarDropdown();
-
-    // Ocultar datos del paciente
-    datosContainer.classList.add('hidden');
-    noMensaje.classList.remove('hidden');
-
-    // Enfocar el input
-    searchInput.focus();
-}
-
-// Funciones auxiliares para el dropdown
-function mostrarDropdown() {
-    dropdown.classList.remove('dropdown-closed');
-    dropdown.classList.add('dropdown-open');
-}
-
-function ocultarDropdown() {
-    dropdown.classList.remove('dropdown-open');
-    dropdown.classList.add('dropdown-closed');
-}
-
-function mostrarMensajeMinCaracteres() {
-    pacientesList.innerHTML = '';
-    noResults.classList.add('hidden');
-    minCharsMessage.classList.remove('hidden');
-    mostrarDropdown();
-}
-
-function mostrarIndicadorCarga() {
-    loadingIndicator.classList.remove('hidden');
-    searchIcon.classList.add('hidden');
-    clearButton.classList.add('hidden');
-}
-
-function ocultarIndicadorCarga() {
-    loadingIndicator.classList.add('hidden');
-    searchIcon.classList.remove('hidden');
-
-    if (searchInput.value.trim().length > 0) {
-        clearButton.classList.remove('hidden');
-        searchIcon.classList.add('hidden');
-    }
-}
-
-function mostrarError(mensaje) {
-    pacientesList.innerHTML = `
-        <div class="p-4 text-center text-red-500">
-            <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            ${mensaje}
-        </div>
-    `;
-    noResults.classList.add('hidden');
-    minCharsMessage.classList.add('hidden');
-    mostrarDropdown();
-}
-
-// ==============================
-// 5. HISTORIAL DE ATENCIONES
-// ==============================
-
-/**
- * Función para cargar las consultas dinámicamente
- * @param {Array} atenciones - Lista de atenciones del paciente
- */
-function cargarConsultas(atenciones) {
-    const container = document.getElementById('consultas-container');
-    const noConsultasMsg = document.getElementById('no-consultas-mensaje');
-
-    // Limpiar contenedor
-    container.innerHTML = '';
-
-    if (!atenciones || atenciones.length === 0) {
-        noConsultasMsg.classList.remove('hidden');
-        return;
-    }
-
-    noConsultasMsg.classList.add('hidden');
-
-    // Renderizar cada consulta
-    atenciones.forEach((atencion, index) => {
-        const consultaElement = crearConsultaElement(atencion, index);
-        container.appendChild(consultaElement);
-    });
-}
-
-/**
- * Función para crear el elemento HTML de una consulta
- * @param {Object} atencion - Datos de la atención médica
- * @param {number} index - Índice de la consulta
- * @returns {HTMLElement} - Elemento DOM de la consulta
- */
-function crearConsultaElement(atencion, index) {
-    const consultaDiv = document.createElement('div');
-
-    // Determinar color del borde según el tipo de consulta
-    const colorConfig = getColorConfig(atencion.tipo_consulta);
-
-    consultaDiv.className = `bg-white rounded-2xl shadow-xl p-8 card-hover transition-all duration-300 border-l-4 ${colorConfig.border}`;
-
-    // Formatear fecha
-    const fecha = new Date(atencion.fecha_atencion);
-    const fechaFormateada = fecha.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-
-    consultaDiv.innerHTML = `
-        <div class="flex justify-between items-start mb-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 ${colorConfig.dot} rounded-full"></div>
-                <h3 class="text-xl font-bold text-gray-800">${fechaFormateada}</h3>
-                <span class="${colorConfig.badge} px-3 py-1 rounded-full text-sm font-medium">${atencion.tipo_consulta}</span>
-            </div>
-            <button class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-            </button>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Evaluación Clínica -->
-            <div class="lg:col-span-2 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-xl">
-                        <h4 class="font-semibold text-blue-800 text-sm mb-2">Motivo de Consulta</h4>
-                        <p class="text-blue-700">${atencion.motivo_consulta || 'No especificado'}</p>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-xl">
-                        <h4 class="font-semibold text-purple-800 text-sm mb-2">Síntomas</h4>
-                        <p class="text-purple-700">${atencion.sintomas || 'No especificado'}</p>
-                    </div>
-                </div>
+                   <!-- fin diagnosticos-->
 
-                ${atencion.examen_fisico ? `
-                    <div class="bg-green-50 p-4 rounded-xl">
-                        <h4 class="font-semibold text-green-800 text-sm mb-2">Examen Físico</h4>
-                        <p class="text-green-700">${atencion.examen_fisico}</p>
-                    </div>
-                ` : ''}
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-red-50 p-4 rounded-xl">
-                        <h4 class="font-semibold text-red-800 text-sm mb-2">Diagnósticos</h4>
-                        <p class="text-red-700">${atencion.diagnosticos && atencion.diagnosticos.length > 0 ? atencion.diagnosticos.join(', ') : 'Sin diagnósticos registrados'}</p>
-                    </div>
-                    <div class="bg-cyan-50 p-4 rounded-xl">
-                        <h4 class="font-semibold text-cyan-800 text-sm mb-2">Plan de Tratamiento</h4>
-                        <p class="text-cyan-700">${atencion.tratamiento || 'No especificado'}</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    ${atencion.examenes_enviados ? `
-                        <div class="bg-yellow-50 p-4 rounded-xl">
-                            <h4 class="font-semibold text-yellow-800 text-sm mb-2">Exámenes Solicitados</h4>
-                            <p class="text-yellow-700">${atencion.examenes_enviados}</p>
-                        </div>
-                    ` : ''}
-                    ${atencion.comentario_adicional ? `
-                        <div class="bg-gray-50 p-4 rounded-xl">
-                            <h4 class="font-semibold text-gray-800 text-sm mb-2">Comentario Adicional</h4>
-                            <p class="text-gray-700">${atencion.comentario_adicional}</p>
-                        </div>
-                    ` : ''}
-                </div>
-
-                <!-- Prescripciones -->
-                ${crearPrescripcionesHTML(atencion.prescripciones)}
+             </div>
             </div>
 
             <!-- Signos Vitales -->
@@ -1944,7 +473,7 @@ function crearConsultaElement(atencion, index) {
     return consultaDiv;
 }
 
-/**
+/*
  * Función para obtener configuración de colores según tipo de consulta
  * @param {string} tipoConsulta - Tipo de consulta
  * @returns {Object} - Configuración de colores
@@ -1971,7 +500,7 @@ function getColorConfig(tipoConsulta) {
     return configs[tipoConsulta] || configs['Chequeo'];
 }
 
-/**
+/*
  * Función para crear HTML de signos vitales
  * @param {Object} atencion - Datos de la atención
  * @returns {string} - HTML de los signos vitales
@@ -1998,7 +527,7 @@ function crearSignosVitalesHTML(atencion) {
         `).join('');
 }
 
-/**
+/*
  * Función para crear HTML de prescripciones
  * @param {Array} prescripciones - Lista de prescripciones
  * @returns {string} - HTML de las prescripciones
@@ -2014,7 +543,6 @@ function crearPrescripcionesHTML(prescripciones) {
                 <div class="flex-shrink-0">
                     <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
                 </div>
                 <div class="ml-3 flex-1">
                     <h6 class="text-sm font-semibold text-orange-800">${prescripcion.medicamento || 'Medicamento no especificado'}</h6>
@@ -2039,7 +567,7 @@ function crearPrescripcionesHTML(prescripciones) {
     `;
 }
 
-/**
+/*
  * Función para integrar con el selector de pacientes
  * @param {Object} paciente - Datos del paciente
  */
@@ -2055,7 +583,7 @@ function cargarConsultasPaciente(paciente) {
 // 6. MODAL PARA NUEVO PACIENTE
 // ==============================
 
-/**
+/*
  * Función para mostrar formulario de nuevo paciente
  */
 function mostrarFormularioNuevoPaciente() {
@@ -2063,7 +591,7 @@ function mostrarFormularioNuevoPaciente() {
     document.body.style.overflow = 'hidden'; // Prevenir scroll del body
 }
 
-/**
+/*
  * Función para cerrar modal
  */
 function cerrarModalPaciente() {
@@ -2072,7 +600,7 @@ function cerrarModalPaciente() {
     document.getElementById('form-nuevo-paciente').reset(); // Limpiar formulario
 }
 
-/**
+/*
  * Función para toggle del acordeón
  * @param {string} section - Sección del acordeón
  */
@@ -2089,7 +617,7 @@ function toggleAccordion(section) {
     }
 }
 
-/**
+/*
  * Función de validación del formulario de paciente
  * @param {Object} data - Datos del formulario
  * @returns {boolean} - True si es válido
@@ -2134,7 +662,7 @@ function validarFormulario(data) {
     return true;
 }
 
-/**
+/*
  * Función auxiliar para obtener nombres legibles de campos
  * @param {string} campo - Nombre del campo
  * @returns {string} - Nombre legible
@@ -2153,7 +681,7 @@ function getCampoNombre(campo) {
     return nombres[campo] || campo;
 }
 
-/**
+/*
  * Obtener token CSRF para Django
  * @param {string} name - Nombre de la cookie
  * @returns {string|null} - Valor de la cookie
@@ -2177,7 +705,7 @@ function getCookie(name) {
 // 7. FUNCIONES GLOBALES SEGURAS
 // ==============================
 
-/**
+/*
  * Función para inicializar de forma segura
  * @returns {boolean} - True si se inicializó correctamente
  */
@@ -2195,7 +723,7 @@ function inicializarAtencion() {
     }
 }
 
-/**
+/*
  * Función global para agregar medicamento
  */
 function agregarMedicamento() {
@@ -2216,7 +744,7 @@ function agregarMedicamento() {
     }
 }
 
-/**
+/*
  * Función global para eliminar medicamento de forma segura
  * @param {number} index - Índice del medicamento a eliminar
  */
@@ -2228,7 +756,7 @@ function eliminarMedicamentoSeguro(index) {
     }
 }
 
-/**
+/*
  * Función global para grabar atención
  */
 function grabarAtencion() {
@@ -2249,7 +777,7 @@ function grabarAtencion() {
     }
 }
 
-/**
+/*
  * Función global para agregar diagnóstico
  */
 function agregarDiagnostico() {
@@ -2270,7 +798,7 @@ function agregarDiagnostico() {
     }
 }
 
-/**
+/*
  * Función global para ver datos
  */
 function verDatos() {
@@ -2284,7 +812,7 @@ function verDatos() {
     atencionMedica.verDatos();
 }
 
-/**
+/*
  * Función para verificar el estado del sistema
  * @returns {boolean} - Estado del sistema
  */
@@ -2300,7 +828,7 @@ function verificarSistema() {
 // 8. INICIALIZACIÓN Y EVENTOS CONSOLIDADOS
 // ==============================
 
-/**
+/*
  * Función principal de inicialización cuando el DOM está listo
  */
 document.addEventListener('DOMContentLoaded', function() {
@@ -2449,7 +977,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 8.6 EVENTOS ADICIONALES DE RESPALDO
 // ============================================
 
-// Cerrar modal con tecla Escape
+// Cerrar modal with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         const modal = document.getElementById('modal-agregar-paciente');
@@ -2459,7 +987,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Inicialización de respaldo cuando la ventana termine de cargar
+// Respaldo initialization when window loads
 window.addEventListener('load', function() {
     console.log('🪟 Ventana cargada');
     if (!atencionMedica) {
@@ -2468,7 +996,7 @@ window.addEventListener('load', function() {
     }
 });
 
-// Inicialización por timeout como último recurso
+// Timeout initialization as last resort
 setTimeout(function() {
     if (!atencionMedica && document.readyState === 'complete') {
         console.log('⏰ Inicialización por timeout...');
@@ -2495,6 +1023,30 @@ window.toggleAccordion = toggleAccordion;
 window.limpiarSeleccion = limpiarSeleccion;
 
 console.log('📜 Sistema de Atención Médica - Código organizado cargado y esperando inicialización...');
-</script>
 
-{% endblock %}
+function showTab(tab) {
+    // Oculta todos los contenidos de pestañas
+    document.querySelectorAll('.tab-content').forEach(function(content) {
+        content.classList.remove('active');
+        content.classList.add('hidden');
+    });
+    // Quita el color activo de todos los botones
+    document.querySelectorAll('.tab-button').forEach(function(btn) {
+        btn.classList.remove('border-blue-500', 'text-blue-600');
+        btn.classList.add('border-transparent', 'text-gray-500');
+    });
+    // Muestra el contenido de la pestaña seleccionada
+    var content = document.getElementById('content-' + tab);
+    if (content) {
+        content.classList.add('active');
+        content.classList.remove('hidden');
+    }
+    // Activa el botón de la pestaña seleccionada
+    var btn = document.getElementById('tab-' + tab);
+    if (btn) {
+        btn.classList.add('border-blue-500', 'text-blue-600');
+        btn.classList.remove('border-transparent', 'text-gray-500');
+    }
+}
+window.showTab = showTab;
+{% endblock content %}

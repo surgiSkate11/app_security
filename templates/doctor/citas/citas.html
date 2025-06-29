@@ -1,0 +1,537 @@
+{% extends 'base.html' %}
+{% load static %}
+<title>{% block title %}Calendario de Citas{% endblock %}</title>
+
+{% block content %}
+<div class="min-h-screen -mx-4 -my-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div class="mb-8">
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-400 rounded-2xl p-8 text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-bold mb-2">Calendario de Citas</h2>
+                    <p class="text-blue-100 text-lg">Gestiona tus citas y atenciones</p>
+                </div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                <div class="absolute bottom-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mb-12"></div>
+            </div>
+        </div>
+        <!-- Calendario dinámico -->
+        <div class="mb-8">
+            <div class="futuristic-card max-w-6xl mx-auto">
+                <div class="calendar-controls">
+                    <select id="year-select" class="select-premium"></select>
+                    <select id="month-select" class="select-premium"></select>
+                </div>
+                <div id="calendar" class="calendar-grid"></div>
+            </div>
+        </div>
+        <!-- Modal Glassmorphism -->
+        <div id="modal-cita" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
+            <div class="futuristic-card" style="min-width: 380px; max-width: 98vw; background: rgba(30,34,60,0.95); box-shadow: 0 0 32px var(--neon-cyan); border: 2px solid var(--neon-violet);">
+                <button onclick="closeModal()" style="position:absolute;top:18px;right:18px;font-size:1.5rem;color:var(--neon-red);background:none;border:none;cursor:pointer;">&times;</button>
+                <h2 class="text-2xl mb-4" style="color:var(--neon-cyan);font-family:Orbitron;">Nueva Cita</h2>
+                <form id="form-cita" autocomplete="off">
+                    <div class="mb-3">
+                        <label class="block mb-1 text-neon-cyan" style="color:var(--neon-cyan);">Buscar paciente</label>
+                        <div style="position:relative;">
+                            <input id="paciente-search" type="text" class="select-premium" placeholder="Buscar paciente..." style="width:100%;padding-left:2.2rem;">
+                            <span style="position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);color:var(--neon-cyan);font-size:1.2rem;">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                        <div id="paciente-autocomplete" class="bg-[#232946] rounded-lg mt-1 shadow-lg" style="display:none;position:absolute;z-index:10;width:100%;"></div>
+                        <button type="button" id="btn-nuevo-paciente" class="mt-2 w-full select-premium" style="background:var(--neon-green);color:#232946;font-weight:bold;">Crear nuevo paciente</button>
+                    </div>
+                    <div id="nuevo-paciente-form" class="hidden mb-3">
+                        <input type="text" id="np-nombre" class="select-premium mb-2" placeholder="Nombre completo" required>
+                        <input type="text" id="np-direccion" class="select-premium mb-2" placeholder="Dirección" required>
+                        <input type="text" id="np-telefono" class="select-premium mb-2" placeholder="Teléfono" required>
+                        <input type="email" id="np-email" class="select-premium mb-2" placeholder="Correo electrónico" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="block mb-1" style="color:var(--neon-yellow);">Seleccionar hora disponible</label>
+                        <div id="horas-disponibles" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <button type="submit" class="select-premium w-full" style="background:var(--neon-cyan);color:#232946;font-weight:bold;">Registrar Cita</button>
+                </form>
+            </div>
+        </div>
+        <!-- Permisos -->
+        {% with user.groups.all|join:"," as grupos_str %}
+          {% if not user.is_superuser and not 'Asistentes' in grupos_str and not 'Médicos' in grupos_str %}
+            <div class="futuristic-card max-w-6xl mx-auto mt-8 text-center" style="color:var(--neon-red);font-weight:bold;">
+              No tienes permisos de doctor o tu usuario no está asociado a un doctor.
+            </div>
+          {% endif %}
+        {% endwith %}
+    </main>
+</div>
+{% endblock %}
+
+{% block css %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-cyan: #00f5ff;
+  --neon-violet: #764ba2;
+  --neon-green: #00d4aa;
+  --neon-red: #ff6b6b;
+  --neon-yellow: #fdd835;
+  --glass-bg: rgba(20, 24, 38, 0.85);
+  --glass-blur: blur(12px);
+  --futuristic-border: 2px solid var(--neon-cyan);
+  --futuristic-shadow: 0 0 16px var(--neon-cyan), 0 0 32px var(--neon-violet);
+  --font-main: 'Orbitron', 'Rajdhani', 'Space Mono', monospace;
+}
+.futuristic-card {
+  background: var(--glass-bg);
+  border-radius: 1.5rem;
+  box-shadow: var(--futuristic-shadow);
+  border: var(--futuristic-border);
+  backdrop-filter: var(--glass-blur);
+  padding: 2rem;
+}
+.calendar-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.select-premium {
+  background: #232946;
+  color: var(--neon-cyan);
+  border: 2px solid var(--neon-violet);
+  border-radius: 0.75rem;
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 0 8px var(--neon-violet);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.select-premium:focus {
+  border: 2px solid var(--neon-cyan);
+  box-shadow: 0 0 16px var(--neon-cyan);
+  outline: none;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1.2rem;
+  background: rgba(30,40,60,0.7);
+  border-radius: 1.2rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 32px #232946;
+}
+.day-cell {
+  position: relative;
+  min-height: 90px;
+  border-radius: 1rem;
+  background: #232946;
+  box-shadow: 0 0 8px #232946;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0.7rem 0.5rem 0.5rem 0.7rem;
+  font-size: 1.1rem;
+  font-family: var(--font-main);
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.day-cell[data-status="ocupada"] { border: 2px solid var(--neon-red); box-shadow: 0 0 12px var(--neon-red); background: #2a1a1a; }
+.day-cell[data-status="disponible"] { border: 2px solid var(--neon-yellow); box-shadow: 0 0 12px var(--neon-yellow); background: #2a2a1a; }
+.day-cell[data-status="atendida"] { border: 2px solid var(--neon-green); box-shadow: 0 0 12px var(--neon-green); background: #1a2a1a; }
+.day-cell[data-status="libre"] { border: 2px solid #232946; background: linear-gradient(135deg, #232946 60%, #181c2b 100%); }
+.day-cell .day-number { font-size: 1.3rem; font-weight: bold; color: var(--neon-cyan); }
+.day-cell .add-btn {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--neon-cyan);
+  color: #232946;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 0 8px var(--neon-cyan);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  z-index: 2;
+}
+.day-cell .add-btn:hover { background: var(--neon-violet); color: #fff; box-shadow: 0 0 16px var(--neon-violet); }
+@media (max-width: 900px) { .calendar-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// ===================
+// 1. Calendario dinámico
+// ===================
+const calendar = document.getElementById('calendar');
+const yearSelect = document.getElementById('year-select');
+const monthSelect = document.getElementById('month-select');
+const modal = document.getElementById('modal-cita');
+const formCita = document.getElementById('form-cita');
+const pacienteSearch = document.getElementById('paciente-search');
+const pacienteAutocomplete = document.getElementById('paciente-autocomplete');
+const btnNuevoPaciente = document.getElementById('btn-nuevo-paciente');
+const nuevoPacienteForm = document.getElementById('nuevo-paciente-form');
+const horasDisponibles = document.getElementById('horas-disponibles');
+
+if (calendar && yearSelect && monthSelect && modal && formCita && pacienteSearch && pacienteAutocomplete && btnNuevoPaciente && nuevoPacienteForm && horasDisponibles) {
+let selectedDate = null;
+let pacientes = []; // Cargar por AJAX
+let citas = {};     // Cargar por AJAX
+let horarios = [];  // Cargar por AJAX
+let doctorId = "{{ request.user.doctor.id|default:'' }}";
+if (!doctorId || isNaN(doctorId)) doctorId = null; else doctorId = parseInt(doctorId);
+
+// Inicializar selects de año y mes
+function initYearMonth() {
+  const now = new Date();
+  for (let y = now.getFullYear() - 2; y <= now.getFullYear() + 2; y++) {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    if (y === now.getFullYear()) opt.selected = true;
+    yearSelect.appendChild(opt);
+  }
+  for (let m = 0; m < 12; m++) {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = new Date(2000, m, 1).toLocaleString('es-ES', { month: 'long' });
+    if (m === now.getMonth()) opt.selected = true;
+    monthSelect.appendChild(opt);
+  }
+}
+initYearMonth();
+
+yearSelect.addEventListener('change', renderCalendar);
+monthSelect.addEventListener('change', renderCalendar);
+
+// Renderizar calendario
+function renderCalendar() {
+  const year = parseInt(yearSelect.value);
+  const month = parseInt(monthSelect.value);
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  calendar.innerHTML = '';
+  // Días de la semana
+  const daysOfWeek = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  daysOfWeek.forEach(d => {
+    const cell = document.createElement('div');
+    cell.textContent = d;
+    cell.style.fontWeight = 'bold';
+    cell.style.textAlign = 'center';
+    cell.style.color = 'var(--neon-violet)';
+    calendar.appendChild(cell);
+  });
+  // Espacios vacíos
+  for (let i = 1; i < (firstDay.getDay() || 7); i++) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    cell.style.background = 'transparent';
+    cell.style.boxShadow = 'none';
+    calendar.appendChild(cell);
+  }
+  // Días del mes
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const status = getDayStatus(dateStr);
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    cell.dataset.status = status;
+    cell.innerHTML = `<span class="day-number">${d}</span>`;
+    if (status === 'disponible') {
+      cell.innerHTML += `<button class="add-btn" title="Nueva cita" onclick="openModal('${dateStr}')"><i class="fa fa-plus"></i></button>`;
+    }
+    if (status === 'ocupada') {
+      cell.innerHTML += `<i class="fa fa-user-md" style="position:absolute;bottom:8px;left:8px;color:var(--neon-red);font-size:1.1rem;"></i>`;
+    }
+    if (status === 'atendida') {
+      cell.innerHTML += `<i class="fa fa-check-circle" style="position:absolute;bottom:8px;left:8px;color:var(--neon-green);font-size:1.1rem;"></i>`;
+    }
+    calendar.appendChild(cell);
+  }
+}
+function getDayStatus(dateStr) {
+  // Lógica: citas[dateStr] = { estado: 'ocupada'|'disponible'|'atendida'|'libre' }
+  if (citas[dateStr]) return citas[dateStr].estado;
+  return 'libre';
+}
+renderCalendar();
+
+// ===================
+// 2. Modal y búsqueda de paciente (mejorada)
+// ===================
+let pacienteAutocompleteIndex = -1;
+window.openModal = function(dateStr) {
+  selectedDate = dateStr;
+  modal.classList.remove('hidden');
+  modal.style.animation = 'fadeIn 0.25s';
+  pacienteSearch.value = '';
+  pacienteSearch.dataset.pacienteId = '';
+  pacienteAutocomplete.innerHTML = '';
+  pacienteAutocomplete.style.display = 'none';
+  nuevoPacienteForm.classList.add('hidden');
+  horasDisponibles.innerHTML = '';
+  formCita.dataset.hora = '';
+  // Limpiar campos de nuevo paciente
+  ['np-nombre','np-direccion','np-telefono','np-email'].forEach(id => document.getElementById(id).value = '');
+  // Cargar horas disponibles por AJAX
+  loadHorasDisponibles(dateStr);
+  setTimeout(() => pacienteSearch.focus(), 200);
+};
+window.closeModal = function() {
+  modal.classList.add('hidden');
+  modal.style.animation = '';
+};
+
+// Autocompletado con teclado y click fuera
+pacienteSearch.addEventListener('input', function() {
+  const val = this.value.toLowerCase();
+  const matches = pacientes.filter(p => p.nombre.toLowerCase().includes(val));
+  pacienteAutocomplete.innerHTML = matches.map((p,i) => `<div class="p-2 hover:bg-[#181c2b] cursor-pointer" data-index="${i}" onclick="selectPaciente('${p.id}','${p.nombre}')">${p.nombre}</div>`).join('');
+  pacienteAutocomplete.style.display = matches.length ? 'block' : 'none';
+  pacienteAutocompleteIndex = -1;
+});
+pacienteSearch.addEventListener('keydown', function(e) {
+  const items = pacienteAutocomplete.querySelectorAll('div');
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') {
+    pacienteAutocompleteIndex = (pacienteAutocompleteIndex + 1) % items.length;
+    items.forEach((el,i) => el.style.background = i === pacienteAutocompleteIndex ? 'var(--neon-violet)' : '');
+    e.preventDefault();
+  } else if (e.key === 'ArrowUp') {
+    pacienteAutocompleteIndex = (pacienteAutocompleteIndex - 1 + items.length) % items.length;
+    items.forEach((el,i) => el.style.background = i === pacienteAutocompleteIndex ? 'var(--neon-violet)' : '');
+    e.preventDefault();
+  } else if (e.key === 'Enter' && pacienteAutocompleteIndex >= 0) {
+    items[pacienteAutocompleteIndex].click();
+    e.preventDefault();
+  }
+});
+document.addEventListener('mousedown', function(e) {
+  if (!pacienteAutocomplete.contains(e.target) && e.target !== pacienteSearch) {
+    pacienteAutocomplete.style.display = 'none';
+  }
+});
+window.selectPaciente = function(id, nombre) {
+  pacienteSearch.value = nombre;
+  pacienteAutocomplete.style.display = 'none';
+  pacienteSearch.dataset.pacienteId = id;
+  nuevoPacienteForm.classList.add('hidden');
+};
+btnNuevoPaciente.addEventListener('click', function() {
+  nuevoPacienteForm.classList.toggle('hidden');
+  if (!nuevoPacienteForm.classList.contains('hidden')) {
+    setTimeout(() => document.getElementById('np-nombre').focus(), 200);
+  }
+});
+
+// ===================
+// 3. Horarios inteligentes (mejor UX) - ACTUALIZADO
+// ===================
+async function loadHorasDisponibles(dateStr) {
+  horasDisponibles.innerHTML = '';
+  formCita.dataset.hora = '';
+  let url = `/api/horas_disponibles/?fecha=${dateStr}`;
+  if (doctorId) url += `&doctor_id=${doctorId}`;
+  try {
+    let resp = await fetch(url);
+    if (resp.ok) {
+      let data = await resp.json();
+      if (data.horas && data.horas.length) {
+        data.horas.forEach(h => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'select-premium';
+          btn.textContent = h.label;
+          btn.style.transition = 'background 0.2s, color 0.2s';
+          btn.onclick = () => {
+            document.querySelectorAll('#horas-disponibles button').forEach(b => {
+              b.style.background = '';
+              b.style.color = 'var(--neon-cyan)';
+            });
+            btn.style.background = 'var(--neon-green)';
+            btn.style.color = '#232946';
+            formCita.dataset.hora = h.value;
+          };
+          horasDisponibles.appendChild(btn);
+        });
+      } else {
+        horasDisponibles.innerHTML = '<span style="color:var(--neon-red);font-weight:bold;">No hay horarios disponibles para este día.</span>';
+      }
+    } else {
+      horasDisponibles.innerHTML = '<span style="color:var(--neon-red);font-weight:bold;">Error al cargar horarios.</span>';
+    }
+  } catch (e) {
+    horasDisponibles.innerHTML = '<span style="color:var(--neon-red);font-weight:bold;">Error de red al cargar horarios.</span>';
+  }
+}
+
+// ===================
+// 4. AJAX real para Django (robustez)
+// ===================
+async function fetchData() {
+  if (!doctorId) {
+    showMessage('No tienes permisos de doctor o tu usuario no está asociado a un doctor.', 'error');
+    return;
+  }
+  // Cargar pacientes del doctor autenticado
+  try {
+    let resp = await fetch(`/api/pacientes/?doctor_id=${doctorId}`);
+    if (resp.ok) pacientes = await resp.json();
+  } catch (e) { pacientes = []; }
+
+  // Cargar citas del mes actual
+  try {
+    let year = yearSelect.value, month = monthSelect.value;
+    let resp = await fetch(`/api/citas/?doctor_id=${doctorId}&year=${year}&month=${parseInt(month)+1}`);
+    if (resp.ok) citas = await resp.json();
+  } catch (e) { citas = {}; }
+
+  // Cargar horarios disponibles para el doctor (puedes ajustar endpoint)
+  try {
+    let resp = await fetch(`/api/horarios/?doctor_id=${doctorId}`);
+    if (resp.ok) horarios = await resp.json();
+  } catch (e) { horarios = []; }
+
+  renderCalendar();
+}
+
+// Llama fetchData al cambiar mes/año
+yearSelect.addEventListener('change', fetchData);
+monthSelect.addEventListener('change', fetchData);
+
+// Llama fetchData al cargar
+fetchData();
+
+// ===================
+// 5. Registrar cita vía AJAX (UX premium)
+// ===================
+function showMessage(msg, type = 'success') {
+  let color = type === 'success' ? 'var(--neon-green)' : 'var(--neon-red)';
+  let bg = type === 'success' ? '#1a2a1a' : '#2a1a1a';
+  let div = document.createElement('div');
+  div.textContent = msg;
+  div.style.position = 'fixed';
+  div.style.top = '32px';
+  div.style.left = '50%';
+  div.style.transform = 'translateX(-50%)';
+  div.style.background = bg;
+  div.style.color = color;
+  div.style.fontFamily = 'Orbitron';
+  div.style.fontWeight = 'bold';
+  div.style.padding = '1rem 2.5rem';
+  div.style.borderRadius = '1rem';
+  div.style.boxShadow = '0 0 16px ' + color;
+  div.style.zIndex = 9999;
+  div.style.fontSize = '1.2rem';
+  div.style.opacity = 0.95;
+  document.body.appendChild(div);
+  setTimeout(() => { div.style.opacity = 0; setTimeout(() => div.remove(), 600); }, 1800);
+}
+formCita.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  let pacienteId = pacienteSearch.dataset.pacienteId;
+  let hora = formCita.dataset.hora;
+  if (!pacienteId || !hora || !selectedDate) {
+    showMessage('Selecciona paciente y hora disponible.', 'error');
+    return;
+  }
+  let btn = formCita.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Registrando...';
+  let data = {
+    paciente: pacienteId,
+    fecha: selectedDate,
+    hora_cita: hora,
+    doctor: doctorId
+  };
+  try {
+    let resp = await fetch('/api/citas/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    if (resp.ok) {
+      showMessage('Cita registrada correctamente');
+      closeModal();
+      fetchData();
+    } else {
+      let err = await resp.json().catch(()=>({}));
+      showMessage(err.detail || 'Error al registrar la cita', 'error');
+    }
+  } catch (e) {
+    showMessage('Error de red al registrar la cita', 'error');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Registrar Cita';
+});
+
+// ===================
+// 6. Crear paciente rápido desde el modal (mejor UX)
+// ===================
+// Permitir submit con Enter en el formulario rápido
+['np-nombre','np-direccion','np-telefono','np-email'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      nuevoPacienteForm.dispatchEvent(new Event('submit'));
+    }
+  });
+});
+nuevoPacienteForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('np-nombre').value.trim();
+  const direccion = document.getElementById('np-direccion').value.trim();
+  const telefono = document.getElementById('np-telefono').value.trim();
+  const email = document.getElementById('np-email').value.trim();
+  if (!nombre || !direccion || !telefono || !email) {
+    showMessage('Todos los campos son obligatorios', 'error');
+    return;
+  }
+  let btn = btnNuevoPaciente;
+  btn.disabled = true;
+  btn.textContent = 'Creando...';
+  let data = {
+    nombre: nombre,
+    direccion: direccion,
+    telefono: telefono,
+    email: email,
+    doctor: doctorId
+  };
+  try {
+    let resp = await fetch('/api/pacientes/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    if (resp.ok) {
+      const paciente = await resp.json();
+      pacientes.push(paciente);
+      pacienteSearch.value = paciente.nombre;
+      pacienteSearch.dataset.pacienteId = paciente.id;
+      nuevoPacienteForm.classList.add('hidden');
+      showMessage('Paciente creado correctamente');
+    } else {
+      let err = await resp.json().catch(()=>({}));
+      showMessage(err.detail || 'Error al crear paciente', 'error');
+    }
+  } catch (e) {
+    showMessage('Error de red al crear paciente', 'error');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Crear nuevo paciente';
+});
+
+// Animación modal
+const style = document.createElement('style');
+style.innerHTML = `@keyframes fadeIn { from { opacity:0; transform:scale(0.98);} to { opacity:1; transform:scale(1);} }`;
+document.head.appendChild(style);
+} else {
+  console.warn('Elementos del calendario premium no encontrados en el DOM.');
+}
+});
+</script>
+{% endblock %}

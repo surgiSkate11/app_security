@@ -80,16 +80,16 @@ urlpatterns = [
     path('empleado/<int:pk>/eliminar/', EmpleadoDeleteView.as_view(), name='empleado_delete'),
 
     # TipoMedicamento
-    path('tipomedicamento/', TipoMedicamentoListView.as_view(), name='tipomedicamento_list'),
-    path('tipomedicamento/nuevo/', TipoMedicamentoCreateView.as_view(), name='tipomedicamento_create'),
-    path('tipomedicamento/<int:pk>/editar/', TipoMedicamentoUpdateView.as_view(), name='tipomedicamento_update'),
-    path('tipomedicamento/<int:pk>/eliminar/', TipoMedicamentoDeleteView.as_view(), name='tipomedicamento_delete'),
+    path('tipo_medicamento/', TipoMedicamentoListView.as_view(), name='tipo_medicamento_list'),
+    path('tipo_medicamento/nuevo/', TipoMedicamentoCreateView.as_view(), name='tipo_medicamento_create'),
+    path('tipo_medicamento/<int:pk>/editar/', TipoMedicamentoUpdateView.as_view(), name='tipo_medicamento_update'),
+    path('tipo_medicamento/<int:pk>/eliminar/', TipoMedicamentoDeleteView.as_view(), name='tipo_medicamento_delete'),
 
     # MarcaMedicamento
-    path('marcamedicamento/', MarcaMedicamentoListView.as_view(), name='marcamedicamento_list'),
-    path('marcamedicamento/nuevo/', MarcaMedicamentoCreateView.as_view(), name='marcamedicamento_create'),
-    path('marcamedicamento/<int:pk>/editar/', MarcaMedicamentoUpdateView.as_view(), name='marcamedicamento_update'),
-    path('marcamedicamento/<int:pk>/eliminar/', MarcaMedicamentoDeleteView.as_view(), name='marcamedicamento_delete'),
+    path('marca_medicamento/', MarcaMedicamentoListView.as_view(), name='marca_medicamento_list'),
+    path('marca_medicamento/nuevo/', MarcaMedicamentoCreateView.as_view(), name='marca_medicamento_create'),
+    path('marca_medicamento/<int:pk>/editar/', MarcaMedicamentoUpdateView.as_view(), name='marca_medicamento_update'),
+    path('marca_medicamento/<int:pk>/eliminar/', MarcaMedicamentoDeleteView.as_view(), name='marca_medicamento_delete'),
 
     # Medicamento
     path('medicamento/', MedicamentoListView.as_view(), name='medicamento_list'),
@@ -104,16 +104,16 @@ urlpatterns = [
     path('diagnostico/<int:pk>/eliminar/', DiagnosticoDeleteView.as_view(), name='diagnostico_delete'),
 
     # TipoGasto
-    path('tipogasto/', TipoGastoListView.as_view(), name='tipogasto_list'),
-    path('tipogasto/nuevo/', TipoGastoCreateView.as_view(), name='tipogasto_create'),
-    path('tipogasto/<int:pk>/editar/', TipoGastoUpdateView.as_view(), name='tipogasto_update'),
-    path('tipogasto/<int:pk>/eliminar/', TipoGastoDeleteView.as_view(), name='tipogasto_delete'),
+    path('tipo_gasto/', TipoGastoListView.as_view(), name='tipo_gasto_list'),
+    path('tipo_gasto/nuevo/', TipoGastoCreateView.as_view(), name='tipo_gasto_create'),
+    path('tipo_gasto/<int:pk>/editar/', TipoGastoUpdateView.as_view(), name='tipo_gasto_update'),
+    path('tipo_gasto/<int:pk>/eliminar/', TipoGastoDeleteView.as_view(), name='tipo_gasto_delete'),
 
     # GastoMensual
-    path('gastomensual/', GastoMensualListView.as_view(), name='gastomensual_list'),
-    path('gastomensual/nuevo/', GastoMensualCreateView.as_view(), name='gastomensual_create'),
-    path('gastomensual/<int:pk>/editar/', GastoMensualUpdateView.as_view(), name='gastomensual_update'),
-    path('gastomensual/<int:pk>/eliminar/', GastoMensualDeleteView.as_view(), name='gastomensual_delete'),
+    path('gasto_mensual/', GastoMensualListView.as_view(), name='gasto_mensual_list'),
+    path('gasto_mensual/nuevo/', GastoMensualCreateView.as_view(), name='gasto_mensual_create'),
+    path('gasto_mensual/<int:pk>/editar/', GastoMensualUpdateView.as_view(), name='gasto_mensual_update'),
+    path('gasto_mensual/<int:pk>/eliminar/', GastoMensualDeleteView.as_view(), name='gasto_mensual_delete'),
 
     # Galería de fotos de pacientes
     path('pacientes/<int:paciente_id>/galeriafotos/', FotoPacienteListView.as_view(), name='galeriafotos'),

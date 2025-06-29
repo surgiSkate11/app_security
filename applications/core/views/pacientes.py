@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from applications.core.forms.pacientes import PacienteForm
 from applications.doctor.utils.auditorias import registrar_auditoria
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 """  Vista para buscar pacientes mediante AJAX. Por nombres, apellidos, cédula o teléfono. """
 
@@ -154,15 +155,29 @@ def paciente_find(request):
         }, status=500)
 
 
-class PacienteListView(ListView):
+class PacienteListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Paciente
     template_name = 'core/pacientes/list.html'
     context_object_name = 'pacientes'
     paginate_by = 20
+    permission_required = 'core.view_paciente'
 
     def get_queryset(self):
         queryset = super().get_queryset()
         q = self.request.GET.get('q')
+        user = self.request.user
+        # Si es médico, solo ve sus pacientes (por atenciones previas)
+        if user.is_superuser or user.groups.filter(name='Administrador').exists() or user.groups.filter(name='Asistentes').exists():
+            pass
+        elif user.groups.filter(name='Médicos').exists():
+            from applications.core.models import Doctor
+            try:
+                doctor = Doctor.objects.get(email=user.email)
+                queryset = queryset.filter(atenciones__doctor=doctor).distinct()
+            except Doctor.DoesNotExist:
+                queryset = queryset.none()
+        else:
+            queryset = queryset.none()
         if q:
             queryset = queryset.filter(nombres__icontains=q) | queryset.filter(apellidos__icontains=q)
         return queryset

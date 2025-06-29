@@ -1,5 +1,6 @@
 from django import forms
 from applications.core.models import Diagnostico
+from applications.utils.widgets import MicrophoneTextarea
 
 class DiagnosticoForm(forms.ModelForm):
     class Meta:
@@ -8,7 +9,7 @@ class DiagnosticoForm(forms.ModelForm):
         widgets = {
             'codigo': forms.TextInput(attrs={'class': 'form-input', 'required': True}),
             'descripcion': forms.TextInput(attrs={'class': 'form-input', 'required': True}),
-            'datos_adicionales': forms.Textarea(attrs={'class': 'form-input', 'rows': 2}),
+            'datos_adicionales': MicrophoneTextarea(attrs={'class': 'form-input', 'rows': 2}),
             'activo': forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
         }
         error_messages = {

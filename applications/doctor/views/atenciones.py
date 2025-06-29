@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from applications.core.models import Paciente, Medicamento, Diagnostico, Doctor
 from applications.doctor.forms.atenciones import AtencionForm
@@ -20,20 +21,33 @@ from proy_clinico.util import save_audit
 from applications.doctor.utils.auditorias import registrar_auditoria
 
 
-class AtencionListView(PermissionMixin, ListViewMixin, ListView):
+class AtencionListView(LoginRequiredMixin, PermissionRequiredMixin, ListViewMixin, ListView):
     template_name = 'doctor/atenciones/list.html'
     model = Atencion
     context_object_name = 'atenciones'
-    permission_required = 'view_atencion'
+    permission_required = 'doctor.view_atencion'
 
     def get_queryset(self):
         q1 = self.request.GET.get('q')
-
-        if q1  is not None:
-               self.query.add(Q(paciente__nombres__icontains=q1), Q.OR)
-               self.query.add(Q(paciente__apellidos__icontains=q1), Q.OR)
-               self.query.add(Q(motivo_consulta__icontains=q1), Q.OR)
-        return self.model.objects.filter(self.query).order_by('-fecha_atencion')
+        qs = self.model.objects.all()
+        user = self.request.user
+        if user.is_superuser or user.groups.filter(name='Administrador').exists() or user.groups.filter(name='Asistentes').exists():
+            pass
+        elif user.groups.filter(name='Médicos').exists():
+            try:
+                doctor = Doctor.objects.get(email=user.email)
+                qs = qs.filter(doctor=doctor)
+            except Doctor.DoesNotExist:
+                qs = qs.none()
+        else:
+            qs = qs.none()
+        if q1 is not None:
+            qs = qs.filter(
+                Q(paciente__nombres__icontains=q1) |
+                Q(paciente__apellidos__icontains=q1) |
+                Q(motivo_consulta__icontains=q1)
+            )
+        return qs.order_by('-fecha_atencion')
 
 
     def get_context_data(self, **kwargs):
@@ -43,12 +57,17 @@ class AtencionListView(PermissionMixin, ListViewMixin, ListView):
         return context
 
 
-class AtencionCreateView(PermissionMixin, CreateViewMixin, CreateView):
+class AtencionCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateViewMixin, CreateView):
     model = Atencion
     template_name = 'doctor/atenciones/form.html'
     form_class = AtencionForm
     success_url = reverse_lazy('doctor:atencion_list')
-    permission_required = 'add_atencion'
+    permission_required = 'doctor.add_atencion'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -146,12 +165,17 @@ class AtencionCreateView(PermissionMixin, CreateViewMixin, CreateView):
             }, status=500)
 
 
-class AtencionUpdateView(PermissionMixin, UpdateViewMixin, UpdateView):
+class AtencionUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateViewMixin, UpdateView):
     model = Atencion
     template_name = 'doctor/atenciones/form.html'
     form_class = AtencionForm
     success_url = reverse_lazy('doctor:atencion_list')
-    permission_required = 'change_atencion'
+    permission_required = 'doctor.change_atencion'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -287,11 +311,11 @@ class AtencionUpdateView(PermissionMixin, UpdateViewMixin, UpdateView):
                 "msg": f"Error al actualizar la atención médica: {str(e)}"
             }, status=500)
 
-class AtencionDeleteView(PermissionMixin, DeleteViewMixin, DeleteView):
+class AtencionDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteViewMixin, DeleteView):
     model = Atencion
     template_name = 'core/delete.html'
     success_url = reverse_lazy('doctor:atencion_list')
-    permission_required = 'delete_atencion'
+    permission_required = 'doctor.delete_atencion'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

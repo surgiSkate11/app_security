@@ -1,5 +1,3 @@
-
-
 from django.views.generic import TemplateView
 from applications.security.components.menu_module import MenuModule
 from applications.security.components.mixin_crud import PermissionMixin
